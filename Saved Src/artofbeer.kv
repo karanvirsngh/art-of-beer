@@ -2,7 +2,7 @@
 
 <MainScreen>:
     FloatLayout:
-        size: root.width, root.height
+        #size: root.width, root.height
         canvas:
             Color:
                 rgb: 1, 1, 1
@@ -17,13 +17,15 @@
             font_size: '20sp'
             background_color: (1, 1, 1, .3)
             color: (0, 0, 0, 1)
-            on_release: root.show_product_screen()
+            on_press: root.manager.current = 'Product_Screen'
            
 <ProductScreen>:
     FloatLayout:
-        size: root.width, root.height
+        #size: root.width, root.height
         canvas:
             Color:
                 rgb: 0, 1, 0
             Rectangle:
                 size: root.size
+        Button:
+            on_press: root.manager.current = 'Main_Screen'
