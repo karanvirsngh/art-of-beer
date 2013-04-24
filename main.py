@@ -5,7 +5,8 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.properties import NumericProperty
 from kivy.uix.widget import Widget
 from kivy.app import App
-from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition, SwapTransition, WipeTransition, FadeTransition, SlideTransition
+
 #from kivy.interactive import InteractiveLauncher
 
 #import mysql.connector
@@ -69,6 +70,8 @@ Builder.load_string('''
                 rgb: 0, 0, 1
             Rectangle:
                 size: root.size
+        ListView:
+            size_hint: .8, .8
         Button:
             text: 'Go back'
             size_hint: None, None
@@ -77,6 +80,7 @@ Builder.load_string('''
 ''')
 class ProductScreen(Screen):
     def on_click(self):
+        sm.transition = SlideTransition(direction='left')
         sm.current = 'Main_Screen'
         #sm.transition = SlideTransition(direction="up")
 
@@ -89,7 +93,9 @@ class ProductScreen(Screen):
 
 class MainScreen(Screen):
     def on_click(self):
+        sm.transition = WipeTransition(direction='right')
         sm.current = 'Product_Screen'
+
 # Create the screen manager
 sm = ScreenManager()
 sm.add_widget(MainScreen(name='Main_Screen'))
