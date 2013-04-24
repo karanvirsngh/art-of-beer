@@ -1,0 +1,5 @@
+art-of-beer
+===========
+
+Build Command:
+./build.py --dir ~/Desktop/kivy/python-for-android/workspace/ArtofBeer/art-of-beer/ --package com.molsoncoors.artofbeer --version 1.0 --orientation landscape --permission INTERNET debug installd --name ArtofBeer

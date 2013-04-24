@@ -1,0 +1,29 @@
+#:kivy 1.0.9
+
+<MainScreen>:
+    FloatLayout:
+        size: root.width, root.height
+        canvas:
+            Color:
+                rgb: 1, 1, 1
+            Rectangle:
+                source: 'images/main_background.jpg'
+                size: root.size
+        
+        Button:
+            color: (0, 0, 0, 1)
+            italic: True
+            text: 'Start Exporing Art of Beer'
+            font_size: '20sp'
+            background_color: (1, 1, 1, .3)
+            color: (0, 0, 0, 1)
+            on_release: root.show_product_screen()
+           
+<ProductScreen>:
+    FloatLayout:
+        size: root.width, root.height
+        canvas:
+            Color:
+                rgb: 0, 1, 0
+            Rectangle:
+                size: root.size

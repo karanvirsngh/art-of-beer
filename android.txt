@@ -1,0 +1,4 @@
+title=Art of Beer
+author=Karan, Ryan, Alex
+orientation=landscape
+
