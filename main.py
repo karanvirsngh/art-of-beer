@@ -5,6 +5,8 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.floatlayout import FloatLayout
 from kivy.properties import NumericProperty
 from kivy.uix.widget import Widget
+from kivy.uix.button import Button
+from kivy.animation import Animation
 from kivy.adapters.listadapter import ListAdapter
 from kivy.adapters.dictadapter import DictAdapter
 from kivy.uix.listview import ListItemButton, ListView, SelectableView
@@ -80,6 +82,12 @@ Builder.load_string('''
             size_hint: None, None
             size: 150, 50
             on_press: root.on_click()
+        Button:
+            text: 'Product Detail'
+            size_hint: None, None
+            size: 250, 50
+            pos_hint: {'x':0.8, 'y':0.0}
+            on_press: root.click_product_detail_screen()
 
 
 [ProductItem@SelectableView+BoxLayout]:
@@ -105,9 +113,15 @@ Builder.load_string('''
         size: root.width, root.height
         canvas:
             Color:
-                rgb: 1, 0, 1
+                rgb: 0.3, 0.3, 0.3
             Rectangle:
                 size: root.size
+        Button:
+            text: 'Product Screen'
+            size_hint: None, None
+            size: 250, 50
+            pos_hint: {'x':0.0, 'y':0.0}
+            on_press: root.click_product_screen()
 
 <ProductFilterScreen>:
     FloatLayout:
@@ -120,11 +134,6 @@ Builder.load_string('''
 ''')
 
 class ProductScreen(Screen):
-
-    #icon1 = Builder.template('ProductItem', title='Hello world', image='myimage.png')
-    #ctx = {'title': 'Another hello world', 
-    #       'image': 'images/Batch19.jpg.png'}
-    #icon2 = Builder.template('ProductItem', **ctx)
     
     def __init__(self, **kwargs):
         super(ProductScreen, self).__init__(**kwargs)
@@ -154,13 +163,28 @@ class ProductScreen(Screen):
         self.add_widget(list_view)
 
     def on_click(self):
-        sm.transition = SlideTransition(direction='left')
+        sm.transition = WipeTransition(direction='left')
         sm.current = 'Main_Screen'
         #sm.transition = SlideTransition(direction="up")
-
+    def click_product_detail_screen(self):
+        sm.transition = WipeTransition(direction='right')
+        sm.current = 'Product_Detail_Screen'
 
 class ProductDetailScreen(Screen):
-    pass
+    button = Button(text='hi', size=(50, 50), size_hint=(None, None), pos_hint={'x':0.3,'y':0.3})
+    def __init__(self, **kwargs):
+        super(ProductDetailScreen, self).__init__(**kwargs)
+        self.add_widget(button)
+
+    def animate(self):
+        anim = Animation(x=100, y=100)
+        anim.start(button)
+        #self.add_widget(button)
+
+
+    def click_product_screen(self):
+            sm.transition = WipeTransition(direction='left')
+            sm.current = 'Product_Screen'
 
 class ProductFilterScreen(Screen):
     pass
