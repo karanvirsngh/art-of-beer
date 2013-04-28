@@ -130,9 +130,21 @@ Builder.load_string('''
         size: root.width, root.height
         canvas:
             Color:
-                rgb: 1, 0, 1
+                rgb: 1, 0, 0
             Rectangle:
                 size: root.size
+        Button:
+            text: 'Main Menu'
+            size_hint: None, None
+            size: 250, 50
+            pos_hint: {'x':0.0, 'y':0.0}
+            on_press: root.click_main_screen()
+        Button:
+            text: 'Product List Screen'
+            size_hint: None, None
+            size: 250, 50
+            pos_hint: {'x':0.8, 'y':0.0}
+            on_press: root.click_product_list_screen()
 ''')
 
 class ProductScreen(Screen):
@@ -164,20 +176,6 @@ class ProductScreen(Screen):
 
         self.add_widget(list_view)
 
-    def on_click(self):
-        sm.transition = WipeTransition(direction='left')
-        sm.current = 'Main_Screen'
-        #sm.transition = SlideTransition(direction="up")
-    def click_product_detail_screen(self):
-        sm.transition = FadeTransition()
-        sm.current = 'Product_Detail_Screen'
-
-class ProductDetailScreen(Screen):
-
-    def __init__(self, **kwargs):
-        super(ProductDetailScreen, self).__init__(**kwargs)
-        button = Button(text='hi', size=(50, 50), size_hint=(None, None), pos_hint={'x':0.3,'y':0.3})
-        self.add_widget(button)
         #Get all image file name in /images/
         image_name_list = []
         for i in os.listdir('./images/'):
@@ -199,6 +197,21 @@ class ProductDetailScreen(Screen):
         #Second Horizontal Scrollable View
         #layout_two
 
+    def on_click(self):
+        sm.transition = WipeTransition(direction='left')
+        sm.current = 'Product_Filter_Screen'
+        #sm.transition = SlideTransition(direction="up")
+    def click_product_detail_screen(self):
+        sm.transition = FadeTransition()
+        sm.current = 'Product_Detail_Screen'
+
+class ProductDetailScreen(Screen):
+
+    def __init__(self, **kwargs):
+        super(ProductDetailScreen, self).__init__(**kwargs)
+        button = Button(text='hi', size=(50, 50), size_hint=(None, None), pos_hint={'x':0.3,'y':0.3})
+        self.add_widget(button)
+
     def animate(self):
         anim = Animation(x=100, y=100)
         anim.start(button)
@@ -209,12 +222,21 @@ class ProductDetailScreen(Screen):
             sm.current = 'Product_Screen'
 
 class ProductFilterScreen(Screen):
-    pass
+    def __init__(self, **kwargs):
+        super(ProductFilterScreen, self).__init__(**kwargs)
+
+    def click_main_screen(self):
+        sm.transition = WipeTransition(direction='left')
+        sm.current = 'Main_Screen'
+
+    def click_product_list_screen(self):
+        sm.transition = WipeTransition(direction='right')
+        sm.current = 'Product_Screen'
 
 class MainScreen(Screen):
     def on_click(self):
         sm.transition = WipeTransition(direction='right')
-        sm.current = 'Product_Screen'
+        sm.current = 'Product_Filter_Screen'
 
 # Create the screen manager
 sm = ScreenManager()
