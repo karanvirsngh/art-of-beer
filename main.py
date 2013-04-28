@@ -2,10 +2,15 @@ import kivy
 kivy.require('1.0.9')
 from kivy.lang import Builder
 from kivy.uix.gridlayout import GridLayout
+from kivy.uix.floatlayout import FloatLayout
 from kivy.properties import NumericProperty
 from kivy.uix.widget import Widget
+from kivy.adapters.listadapter import ListAdapter
+from kivy.adapters.dictadapter import DictAdapter
+from kivy.uix.listview import ListItemButton, ListView, SelectableView
 from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition, SwapTransition, WipeTransition, FadeTransition, SlideTransition
+
 
 #from kivy.interactive import InteractiveLauncher
 
@@ -42,7 +47,6 @@ from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition, SwapT
 #sm.current = 'Title 2'
 Builder.load_string('''
 #:kivy 1.0.9
-
 <MainScreen>:
     FloatLayout:
         size: root.width, root.height
@@ -67,29 +71,99 @@ Builder.load_string('''
         size: root.width, root.height
         canvas:
             Color:
-                rgb: 0, 0, 1
+                rgb: 1, 0, 0
             Rectangle:
                 size: root.size
-        ListView:
-            size_hint: .8, .8
+
         Button:
             text: 'Go back'
             size_hint: None, None
             size: 150, 50
             on_press: root.on_click()
+
+
+[ProductItem@SelectableView+BoxLayout]:
+    size_hint_y: ctx.size_hint_y
+    size_hint_x: ctx.size_hint_x
+    height: ctx.height
+    width: ctx.width
+    Image:
+        source: ctx.source
+        size: root.size
+    Label:
+        text: ctx.text
+    #ListItemButton:
+    #    text: ctx.text
+    #    is_selected: ctx.is_selected
+
+
+
+
+
+<ProductDetailScreen>:
+    FloatLayout:
+        size: root.width, root.height
+        canvas:
+            Color:
+                rgb: 1, 0, 1
+            Rectangle:
+                size: root.size
+
+<ProductFilterScreen>:
+    FloatLayout:
+        size: root.width, root.height
+        canvas:
+            Color:
+                rgb: 1, 0, 1
+            Rectangle:
+                size: root.size
 ''')
+
 class ProductScreen(Screen):
+
+    #icon1 = Builder.template('ProductItem', title='Hello world', image='myimage.png')
+    #ctx = {'title': 'Another hello world', 
+    #       'image': 'images/Batch19.jpg.png'}
+    #icon2 = Builder.template('ProductItem', **ctx)
+    
+    def __init__(self, **kwargs):
+        super(ProductScreen, self).__init__(**kwargs)
+
+        data = { str(i): {'text': str(i) } for i in xrange(100) }
+        #data = { str(i): {'text': str(i), 'is_selected': False} for i in xrange(100) }
+        list_item_args_converter = lambda row_index, rec: {'text': rec['text'],
+                                #'is_selected': rec['is_selected'],
+                                'size_hint_y': None,
+                                'size_hint_x': None,
+                                'height': 100,
+                                'width': 100,
+                                'source': 'images/Batch19.jpg'}
+
+        list_adapter = ListAdapter(data=data,
+                           template='ProductItem',
+                           args_converter=list_item_args_converter)
+
+        dict_adapter = DictAdapter(sorted_keys=[str(i) for i in xrange(100)],
+                           data=data,
+                           args_converter=list_item_args_converter,
+                           template='ProductItem')
+        list_view = ListView(adapter=dict_adapter)
+        list_view.size_hint = (0.5,1.0)
+        list_view.pos_hint = {'x':.3, 'y':0.0}
+
+        self.add_widget(list_view)
+
     def on_click(self):
         sm.transition = SlideTransition(direction='left')
         sm.current = 'Main_Screen'
         #sm.transition = SlideTransition(direction="up")
 
 
-#class ProductDetailScreen(Screen):
-#    pass
+class ProductDetailScreen(Screen):
+    pass
 
-#class ProductFilterScreen(Screen):
-#    pass
+class ProductFilterScreen(Screen):
+    pass
 
 class MainScreen(Screen):
     def on_click(self):
@@ -100,8 +174,8 @@ class MainScreen(Screen):
 sm = ScreenManager()
 sm.add_widget(MainScreen(name='Main_Screen'))
 sm.add_widget(ProductScreen(name='Product_Screen'))
-#sm.add_widget(Product_Detail_Screen(name='Product_Detail_Screen'))
-#sm.add_widget(ProductFilterScreen(name='ProductFilterScreen'))
+sm.add_widget(ProductDetailScreen(name='Product_Detail_Screen'))
+sm.add_widget(ProductFilterScreen(name='Product_Filter_Screen'))
 
 class ArtofBeerApp(App):
     def build(self):
