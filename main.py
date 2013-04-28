@@ -1,4 +1,5 @@
 import kivy
+import os
 kivy.require('1.0.9')
 from kivy.lang import Builder
 from kivy.uix.gridlayout import GridLayout
@@ -6,6 +7,7 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.properties import NumericProperty
 from kivy.uix.widget import Widget
 from kivy.uix.button import Button
+from kivy.uix.scrollview import ScrollView
 from kivy.animation import Animation
 from kivy.adapters.listadapter import ListAdapter
 from kivy.adapters.dictadapter import DictAdapter
@@ -176,12 +178,31 @@ class ProductDetailScreen(Screen):
         super(ProductDetailScreen, self).__init__(**kwargs)
         button = Button(text='hi', size=(50, 50), size_hint=(None, None), pos_hint={'x':0.3,'y':0.3})
         self.add_widget(button)
+        #Get all image file name in /images/
+        image_name_list = []
+        for i in os.listdir('./images/'):
+            image_name_list.append(i)
+        #First Horizontal Scrollable View
+        layout = GridLayout(cols=30, spacing=10, size_hint_x=None)
+        #Make sure the height is such that there is something to scroll.
+        layout.bind(minimum_width=layout.setter('width'))
+        for file_name in image_name_list:
+            float_layout = FloatLayout(size_hint_x=None, size_hint_y=None, height=150, width=150)
+            #image_view = Image(source='im')
+            btn = Button(text=file_name, size_hint_y=None, size_hint_x=None, height=150, width=150)
+            layout.add_widget(btn)
+        scroll_view_one = ScrollView(size_hint=(1.0, None), height=150, pos_hint={'x':0.0,'y':0.3})
+        scroll_view_one.do_scroll_y=False
+        scroll_view_one.do_scroll_x=True
+        scroll_view_one.add_widget(layout)
+        self.add_widget(scroll_view_one)
+        #Second Horizontal Scrollable View
+        #layout_two
 
     def animate(self):
         anim = Animation(x=100, y=100)
         anim.start(button)
         #self.add_widget(button)
-
 
     def click_product_screen(self):
             sm.transition = WipeTransition(direction='left')
