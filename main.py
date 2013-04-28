@@ -167,13 +167,14 @@ class ProductScreen(Screen):
         sm.current = 'Main_Screen'
         #sm.transition = SlideTransition(direction="up")
     def click_product_detail_screen(self):
-        sm.transition = WipeTransition(direction='right')
+        sm.transition = FadeTransition()
         sm.current = 'Product_Detail_Screen'
 
 class ProductDetailScreen(Screen):
-    button = Button(text='hi', size=(50, 50), size_hint=(None, None), pos_hint={'x':0.3,'y':0.3})
+
     def __init__(self, **kwargs):
         super(ProductDetailScreen, self).__init__(**kwargs)
+        button = Button(text='hi', size=(50, 50), size_hint=(None, None), pos_hint={'x':0.3,'y':0.3})
         self.add_widget(button)
 
     def animate(self):
