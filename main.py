@@ -180,6 +180,12 @@ Builder.load_string('''
             size: 250, 50
             pos_hint: {'x':0.8, 'y':0.0}
             on_press: root.click_product_list_screen()
+        Button:
+            text: 'Sample Detail Screen'
+            size_hint: None, None
+            size: 250, 50
+            pos_hint: {'x':1.6, 'y':0.0}
+            on_press: root.click_product_detail_screen()
 ''')
 
 class ProductScreen(Screen):
@@ -455,6 +461,10 @@ class ProductFilterScreen(Screen):
     def click_product_list_screen(self):
         sm.transition = WipeTransition(direction='right')
         sm.current = 'Product_Screen'
+
+    def click_product_detail_screen(self):
+        sm.transition = WipeTransition(direction='right')
+        sm.current = 'Product_Detail_Screen'
 
 class MainScreen(Screen):
     def on_click(self):
