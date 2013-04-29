@@ -7,9 +7,12 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.stacklayout import StackLayout
+from kivy.uix.relativelayout import RelativeLayout
+from kivy.uix.anchorlayout import AnchorLayout
 from kivy.properties import NumericProperty, ObjectProperty
 from kivy.uix.widget import Widget
 from kivy.uix.button import Button
+from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView
 from kivy.animation import Animation
 from kivy.adapters.listadapter import ListAdapter
@@ -81,18 +84,46 @@ Builder.load_string('''
                 rgb: 1, 1, 1
             Rectangle:
                 size: root.size
+        RelativeLayout:
+            size_x: root.width
+            size_hint_y: 0.05
+            pos_hint: {'x':0, 'y':0.45}
+            Image:
+                allow_stretch: True
+                keep_ratio: False
+                size: root.width, root.height
+                source: 'images/product_list_gradient.jpg'
+        RelativeLayout:
+            size_x: root.width
+            size_hint_y: 0.05
+            pos_hint: {'x':0.0, 'y':0.05}
+            Image:
+                allow_stretch: True
+                keep_ratio: False
+                size: root.width, root.height
+                source: 'images/product_list_gradient.jpg'
 
-        Button:
-            text: 'Go back'
-            size_hint: None, None
-            size: 150, 50
-            on_press: root.on_click()
-        Button:
-            text: 'Product Detail'
-            size_hint: None, None
-            size: 250, 50
-            pos_hint: {'x':0.8, 'y':0.0}
-            on_press: root.click_product_detail_screen()
+        RelativeLayout:
+            size_x: root.width
+            size_hint_y: 0.2
+            pos: 0, 630
+            Image:
+                allow_stretch: True
+                keep_ratio: False
+                size: root.width, root.height
+                source: 'images/button_gradient.jpg'
+            Button:
+                text: 'Go back'
+                size_hint: None, None
+                size: 150, 50
+                pos_hint: {'x':0.0, 'y':0.3}
+                on_press: root.on_click()
+            Button:
+                text: 'Product Detail'
+                size_hint: None, None
+                size: 250, 50
+                pos_hint: {'x':0.8, 'y':0.3}
+                on_press: root.click_product_detail_screen()
 
 
 [ProductItem@SelectableView+BoxLayout]:
@@ -180,24 +211,49 @@ class ProductScreen(Screen):
 
         #self.add_widget(list_view)
 
-        #Get all image file name in /images/
-        image_name_list = []
+        #Get all image file name in Images Craft Bottles
+        craft_image_list = []
         for i in os.listdir('./images/Craft/bottles/'):
-            image_name_list.append(i)
+            craft_image_list.append(i)
         #First Horizontal Scrollable View
-        layout = GridLayout(cols=30, spacing=10, size_hint_x=None)
+        grid_one_layout = GridLayout(cols=30, spacing=10, size_hint_x=None)
         #Make sure the height is such that there is something to scroll.
-        layout.bind(minimum_width=layout.setter('width'))
-        for file_name in image_name_list:
-            float_layout = FloatLayout(size_hint_x=None, size_hint_y=None, height=200, width=200)
-            #image_view = Image(source='im')
+        grid_one_layout.bind(minimum_width=grid_one_layout.setter('width'))
+        for file_name in craft_image_list:
+            relative_one_layout = AnchorLayout(size_hint_x=None, size_hint_y=None, height=200, width=200)
             btn = Button(size_hint_y=None, size_hint_x=None, height=200, width=200, background_color=[1,1,1,1], background_normal='images/Craft/bottles/{name}'.format(name=file_name))
-            layout.add_widget(btn)
-        scroll_view_one = ScrollView(bar_color= [0,0,0,0], size_hint=(1.0, None), height=200, pos_hint={'x':0.0,'y':0.3})
+            label = Label(text=file_name, color=[0,0,0,1], size_hint=(None, None), height=30, width=relative_one_layout.width, halign='center', pos_hint={'x':0,'y':0})
+            relative_one_layout.add_widget(btn)
+            relative_one_layout.add_widget(label)
+            grid_one_layout.add_widget(relative_one_layout)
+
+        scroll_view_one = ScrollView(bar_color= [0,0,0,0], size_hint=(1.0, None), height=200, pos_hint={'x':0.0,'y':0.5})
         scroll_view_one.do_scroll_y=False
         scroll_view_one.do_scroll_x=True
-        scroll_view_one.add_widget(layout)
+        scroll_view_one.add_widget(grid_one_layout)
         self.add_widget(scroll_view_one)
+
+        #Get all image file name in Images Domestic Bottles
+        domestic_image_list = []
+        for i in os.listdir('./images/Domestic/bottles/'):
+            domestic_image_list.append(i)
+        #First Horizontal Scrollable View
+        grid_two_layout = GridLayout(cols=30, spacing=10, size_hint_x=None)
+        #Make sure the height is such that there is something to scroll.
+        grid_two_layout.bind(minimum_width=grid_two_layout.setter('width'))
+        for file_name in domestic_image_list:
+            relative_two_layout = AnchorLayout(size_hint_x=None, size_hint_y=None, height=200, width=200)
+            btn = Button(size_hint_y=None, size_hint_x=None, height=200, width=200, background_color=[1,1,1,1], background_normal='images/Domestic/bottles/{name}'.format(name=file_name))
+            label = Label(text=file_name, color=[0,0,0,1], size_hint=(None, None), height=30, width=relative_two_layout.width, halign='center', pos_hint={'x':0,'y':0})
+            relative_two_layout.add_widget(btn)
+            relative_two_layout.add_widget(label)
+            grid_two_layout.add_widget(relative_two_layout)
+
+        scroll_view_two = ScrollView(bar_color= [0,0,0,0], size_hint=(1.0, None), height=200, pos_hint={'x':0.0,'y':0.1})
+        scroll_view_two.do_scroll_y=False
+        scroll_view_two.do_scroll_x=True
+        scroll_view_two.add_widget(grid_two_layout)
+        self.add_widget(scroll_view_two)
         #Second Horizontal Scrollable View
         #layout_two
 
@@ -226,7 +282,10 @@ class ProductDetailScreen(Screen):
             sm.current = 'Product_Screen'
 
 class ProductFilterScreen(Screen):
-
+    # Dictionary that contains all the fields. 1 represents selected, 0 is not selected.
+    query_dict = {'light':0, 'dark':0, 'bottle':0, 'can':0, 'craft':0, 'domestic':0, 
+                'import':0, 'specialty':0, 'sport':0, 'dining':0, 'party':0, 'club':0}
+    #Stacklayout for each selection screen            
     stack_layout_one = StackLayout(orientation='lr-tb', spacing=0, size_hint=(1.0,0.9))
     stack_layout_two = StackLayout(orientation='lr-tb', spacing=0, size_hint=(1.0,0.9), pos=(1200, 0))
     stack_layout_three = StackLayout(orientation='lr-tb', spacing=0, size_hint=(1.0,0.9), pos=(1200, 0))
@@ -243,7 +302,7 @@ class ProductFilterScreen(Screen):
     craftbeer_button = Button(text='Craft Beer', size_hint=(.333,.3), background_normal='images/filter_item_background.jpg')
     domesticbeer_button = Button(text='Domestic Beer', size_hint=(.333,.3), background_normal='images/filter_item_background.jpg')
     importbeer_button = Button(text='Import Beer', size_hint=(.333,.3), background_normal='images/filter_item_background.jpg')
-    specialtybeer_button = Button(text='ImportBeer', size_hint=(.333,.3), background_normal='images/filter_item_background.jpg')
+    specialtybeer_button = Button(text='Specialty Beer', size_hint=(.333,.3), background_normal='images/filter_item_background.jpg')
     skip_three_button = Button(text='Skip', size_hint=(.333,.3), background_color=[.3,.3,.3,1.0])
     # Special Tags
     sportsbeer_button = Button(text='Sports', size_hint=(.333,.3), background_normal='images/filter_item_background.jpg')
@@ -256,7 +315,12 @@ class ProductFilterScreen(Screen):
         self.remove_widget(widget)
 
     def stack_one_item_select(self, btn):
-        out_anim = Animation(x=-700, y=0, t='in_out_back', duration=1.2)
+        # Check What's Selected
+        if btn.getter('text') == 'Light Beer':
+            self.query_dict['light'] = 1
+        elif btn.getter('text') == 'Dark Beer':
+            self.query_dict['dark'] = 1
+        out_anim = Animation(x=-700, y=0, t='in_out_back', duration=1.0)
         out_anim.bind(on_complete=self.stack_animation_complete)
         out_anim.start(self.stack_layout_one)
         #Animation.cancel_all(self.stack_layout_one, 'x', 'y')
@@ -264,7 +328,12 @@ class ProductFilterScreen(Screen):
         in_anim.start(self.stack_layout_two)
 
     def stack_two_item_select(self, btn):
-        out_anim = Animation(x=-700, y=0, t='in_out_back', duration=1.2)
+        # Check What's Selected
+        if btn.getter('text') == 'Bottle Beer':
+            self.query_dict['bottle'] = 1
+        elif btn.getter('text') == 'Canned Beer':
+            self.query_dict['can'] = 1
+        out_anim = Animation(x=-700, y=0, t='in_out_back', duration=1.0)
         out_anim.bind(on_complete=self.stack_animation_complete)
         out_anim.start(self.stack_layout_two)
         #Animation.cancel_all(self.stack_layout_one, 'x', 'y')
@@ -272,7 +341,16 @@ class ProductFilterScreen(Screen):
         in_anim.start(self.stack_layout_three)
 
     def stack_three_item_select(self, btn):
-        out_anim = Animation(x=-700, y=0, t='in_out_back', duration=1.2)
+        # Check What's Selected
+        if btn.getter('text') == 'Craft Beer':
+            self.query_dict['craft'] = 1
+        elif btn.getter('text') == 'Domestic Beer':
+            self.query_dict['domestic'] = 1
+        elif btn.getter('text') == 'Import Beer':
+            self.query_dict['import'] = 1
+        elif btn.getter('text') == 'Specialty Beer':
+            self.query_dict['specialty'] = 1
+        out_anim = Animation(x=-700, y=0, t='in_out_back', duration=1.0)
         out_anim.bind(on_complete=self.stack_animation_complete)
         out_anim.start(self.stack_layout_three)
         #Animation.cancel_all(self.stack_layout_one, 'x', 'y')
@@ -280,13 +358,28 @@ class ProductFilterScreen(Screen):
         in_anim.start(self.stack_layout_four)
 
     def stack_four_item_select(self, btn):
+        if btn.getter('text') == 'Sports':
+            self.query_dict['sport'] = 1
+        elif btn.getter('text') == 'Dining':
+            self.query_dict['dining'] = 1
+        elif btn.getter('text') == 'Party':
+            self.query_dict['party'] = 1
+        elif btn.getter('text') == 'Club':
+            self.query_dict['club'] = 1
         self.remove_widget(self.stack_layout_four)
         # Reset stack layout positions
         self.stack_layout_one.pos=(0,0)
         self.stack_layout_two.pos=(1200,0)
         self.stack_layout_three.pos=(1200,0)
         self.stack_layout_four.pos=(1200,0)
-    
+        #PERFORM SQL QUERY HERE
+
+
+        #---------------------------------------------------
+        #RESET QUERY DIRECTIONARY
+        for k in self.query_dict.keys():
+            self.query_dict[k] = 0
+        #Animate Screen Transition
         sm.transition = SlideTransition(direction='left')
         sm.current = 'Product_Screen'
         # Re-add all the widgets
@@ -313,19 +406,19 @@ class ProductFilterScreen(Screen):
 
         self.bottlebeer_button.bind(on_press=self.stack_two_item_select)
         self.canbeer_button.bind(on_press=self.stack_two_item_select)
-        self.skip_two_button.bind(on_press=self.stack_one_item_select)
+        self.skip_two_button.bind(on_press=self.stack_two_item_select)
 
         self.craftbeer_button.bind(on_press=self.stack_three_item_select)
         self.domesticbeer_button.bind(on_press=self.stack_three_item_select)
         self.importbeer_button.bind(on_press=self.stack_three_item_select)
         self.specialtybeer_button.bind(on_press=self.stack_three_item_select)
-        self.skip_three_button.bind(on_press=self.stack_one_item_select)
+        self.skip_three_button.bind(on_press=self.stack_three_item_select)
 
         self.sportsbeer_button.bind(on_press=self.stack_four_item_select)
         self.diningbeer_button.bind(on_press=self.stack_four_item_select)
         self.partybeer_button.bind(on_press=self.stack_four_item_select)
         self.clubbeer_button.bind(on_press=self.stack_four_item_select)
-        self.skip_four_button.bind(on_press=self.stack_one_item_select)
+        self.skip_four_button.bind(on_press=self.stack_four_item_select)
 
 
 
@@ -336,7 +429,7 @@ class ProductFilterScreen(Screen):
         # Second Stack View
         self.stack_layout_two.add_widget(self.bottlebeer_button)
         self.stack_layout_two.add_widget(self.canbeer_button)
-        self.stack_layout_one.add_widget(self.skip_two_button)
+        self.stack_layout_two.add_widget(self.skip_two_button)
         # Third Stack View
         self.stack_layout_three.add_widget(self.craftbeer_button)
         self.stack_layout_three.add_widget(self.domesticbeer_button)
