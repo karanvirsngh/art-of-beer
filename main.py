@@ -1,6 +1,8 @@
 import kivy
 import os
 import time
+import re
+
 kivy.require('1.0.9')
 from kivy.lang import Builder
 from kivy.uix.gridlayout import GridLayout
@@ -125,7 +127,6 @@ Builder.load_string('''
                 pos_hint: {'x':0.8, 'y':0.3}
                 on_press: root.click_product_detail_screen()
 
-
 [ProductItem@SelectableView+BoxLayout]:
     size_hint_y: ctx.size_hint_y
     size_hint_x: ctx.size_hint_x
@@ -140,10 +141,6 @@ Builder.load_string('''
     #    text: ctx.text
     #    is_selected: ctx.is_selected
 
-
-
-
-
 <ProductDetailScreen>:
     FloatLayout:
         size: root.width, root.height
@@ -153,11 +150,35 @@ Builder.load_string('''
             Rectangle:
                 size: root.size
         Button:
-            text: 'Product Screen'
+            text: 'Main Menu'
             size_hint: None, None
             size: 250, 50
             pos_hint: {'x':0.0, 'y':0.0}
+            on_press: root.click_main_screen()
+        Button:
+            text: 'Product Screen'
+            size_hint: None, None
+            size: 250, 50
+            pos_hint: {'x':0.4, 'y':0.0}
             on_press: root.click_product_screen()
+        RelativeLayout:
+            size_x: root.width
+            size_hint_y: 0.05
+            pos_hint: {'x':0, 'y':0.828}
+            Image:
+                allow_stretch: True
+                keep_ratio: False
+                size: root.width, root.height
+                source: 'images/product_list_gradient.jpg'
+        RelativeLayout:
+            size_x: root.width
+            size_hint_y: 0.05
+            pos_hint: {'x':0.0, 'y':0.305}
+            Image:
+                allow_stretch: True
+                keep_ratio: False
+                size: root.width, root.height
+                source: 'images/product_list_gradient.jpg'
 
 <ProductFilterScreen>:
     BoxLayout:
@@ -277,21 +298,31 @@ class ProductDetailScreen(Screen):
         super(ProductDetailScreen, self).__init__(**kwargs)
         # File name of the beer selected
         bottle_name = ('Coors_Lightbottle.jpg')
+        # Beer name from the given bottle name
+        #beer_name = bottle_name[:-4]
+        beer_name = re.sub('[^a-zA-Z0-9\n]', ' ', bottle_name)
+        beer_name = beer_name[:-10]
         # Beer text description pulled from the given beer_name
         beer_description = ('This is a description of the best beer in the world')
 
         # Button definitions of visual wigets
-        logoButton = Button(size=(230, 80), size_hint=(None, None), pos_hint={'x':0.0,'y':0.85}, background_color=[1,1,1,1], background_normal='images/main_logo.jpg')
-        bottleButton = Button(size=(200, 283), size_hint=(None, None), pos_hint={'x':0.0,'y':0.38}, background_color=[1,1,1,1], background_normal='images/Domestic/bottles/{name}'.format(name=bottle_name))
-        descriptionButton = Button(text='{desc}'.format(desc=beer_description), pos_hint={'x':0.25,'y':0.375}, size_hint=(.5,.475), background_color=[.3,.3,.3,1.0])
+        logoButton = Button(size=(200, 70), size_hint=(None, None), pos_hint={'x':0.0,'y':0.88}, background_color=[1,1,1,1], background_normal='images/main_logo.jpg')
+        nameButton = Button(text='{name}'.format(name=beer_name), font_size=(30), color=[255,0,0,1], pos_hint={'x':0.25,'y':0.878}, size_hint=(.5,.12), background_color=[.3,.3,.3,1.0])
+        bottleButton = Button(size=(200, 283), size_hint=(None, None), pos_hint={'x':0.0,'y':0.355}, background_color=[1,1,1,1], background_normal='images/Domestic/bottles/{name}'.format(name=bottle_name))
+        descriptionButton = Button(text='{desc}'.format(desc=beer_description), pos_hint={'x':0.25,'y':0.355}, size_hint=(.5,.475), background_color=[.3,.3,.3,1.0])
         self.add_widget(logoButton)
         self.add_widget(bottleButton)
+        self.add_widget(nameButton)
         self.add_widget(descriptionButton)
 
     def animate(self):
         anim = Animation(x=100, y=100)
         anim.start(button)
         #self.add_widget(button)
+
+    def click_main_screen(self):
+        sm.transition = WipeTransition(direction='left')
+        sm.current = 'Main_Screen'
 
     def click_product_screen(self):
             sm.transition = WipeTransition(direction='left')
