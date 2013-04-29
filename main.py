@@ -77,6 +77,14 @@ Builder.load_string('''
             background_color: (1, 1, 1, .3)
             color: (0, 0, 0, 1)
             on_press: root.on_click()
+        RelativeLayout:
+            size_x: root.width
+            size_y: root.height
+            Image:
+                allow_stretch: True
+                keep_ratio: False
+                size: root.width, root.height
+                source: 'images/SplashScreen.jpg'
            
 <ProductScreen>:
     FloatLayout:
@@ -299,12 +307,10 @@ class ProductDetailScreen(Screen):
         # File name of the beer selected
         bottle_name = ('Coors_Lightbottle.jpg')
         # Beer name from the given bottle name
-        #beer_name = bottle_name[:-4]
         beer_name = re.sub('[^a-zA-Z0-9\n]', ' ', bottle_name)
         beer_name = beer_name[:-10]
         # Beer text description pulled from the given beer_name
         beer_description = ('This is a description of the best beer in the world')
-
         # Button definitions of visual wigets
         logoButton = Button(size=(200, 70), size_hint=(None, None), pos_hint={'x':0.0,'y':0.88}, background_color=[1,1,1,1], background_normal='images/main_logo.jpg')
         nameButton = Button(text='{name}'.format(name=beer_name), font_size=(30), color=[255,0,0,1], pos_hint={'x':0.25,'y':0.878}, size_hint=(.5,.12), background_color=[.3,.3,.3,1.0])
