@@ -1,10 +1,13 @@
 import kivy
 import os
+import time
 kivy.require('1.0.9')
 from kivy.lang import Builder
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.floatlayout import FloatLayout
-from kivy.properties import NumericProperty
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.stacklayout import StackLayout
+from kivy.properties import NumericProperty, ObjectProperty
 from kivy.uix.widget import Widget
 from kivy.uix.button import Button
 from kivy.uix.scrollview import ScrollView
@@ -75,7 +78,7 @@ Builder.load_string('''
         size: root.width, root.height
         canvas:
             Color:
-                rgb: 1, 0, 0
+                rgb: 1, 1, 1
             Rectangle:
                 size: root.size
 
@@ -126,11 +129,12 @@ Builder.load_string('''
             on_press: root.click_product_screen()
 
 <ProductFilterScreen>:
-    FloatLayout:
+    BoxLayout:
+        spacing: 10
         size: root.width, root.height
         canvas:
             Color:
-                rgb: 1, 0, 0
+                rgb: 1, 1, 1
             Rectangle:
                 size: root.size
         Button:
@@ -152,44 +156,44 @@ class ProductScreen(Screen):
     def __init__(self, **kwargs):
         super(ProductScreen, self).__init__(**kwargs)
 
-        data = { str(i): {'text': str(i) } for i in xrange(100) }
+        #data = { str(i): {'text': str(i) } for i in xrange(100) }
         #data = { str(i): {'text': str(i), 'is_selected': False} for i in xrange(100) }
-        list_item_args_converter = lambda row_index, rec: {'text': rec['text'],
-                                #'is_selected': rec['is_selected'],
-                                'size_hint_y': None,
-                                'size_hint_x': None,
-                                'height': 100,
-                                'width': 100,
-                                'source': 'images/Batch19.jpg'}
+        #list_item_args_converter = lambda row_index, rec: {'text': rec['text'],
+        #                        #'is_selected': rec['is_selected'],
+        #                        'size_hint_y': None,
+        #                        'size_hint_x': None,
+        #                        'height': 100,
+        #                        'width': 100,
+        #                        'source': 'images/Batch19.jpg'}
 
-        list_adapter = ListAdapter(data=data,
-                           template='ProductItem',
-                           args_converter=list_item_args_converter)
+        #list_adapter = ListAdapter(data=data,
+        #                   template='ProductItem',
+        #                   args_converter=list_item_args_converter)
 
-        dict_adapter = DictAdapter(sorted_keys=[str(i) for i in xrange(100)],
-                           data=data,
-                           args_converter=list_item_args_converter,
-                           template='ProductItem')
-        list_view = ListView(adapter=dict_adapter)
-        list_view.size_hint = (0.5,1.0)
-        list_view.pos_hint = {'x':.3, 'y':0.0}
+        #dict_adapter = DictAdapter(sorted_keys=[str(i) for i in xrange(100)],
+        #                   data=data,
+        #                   args_converter=list_item_args_converter,
+        #                   template='ProductItem')
+        #list_view = ListView(adapter=dict_adapter)
+        #list_view.size_hint = (0.5,1.0)
+        #list_view.pos_hint = {'x':.3, 'y':0.0}
 
-        self.add_widget(list_view)
+        #self.add_widget(list_view)
 
         #Get all image file name in /images/
         image_name_list = []
-        for i in os.listdir('./images/'):
+        for i in os.listdir('./images/Craft/bottles/'):
             image_name_list.append(i)
         #First Horizontal Scrollable View
         layout = GridLayout(cols=30, spacing=10, size_hint_x=None)
         #Make sure the height is such that there is something to scroll.
         layout.bind(minimum_width=layout.setter('width'))
         for file_name in image_name_list:
-            float_layout = FloatLayout(size_hint_x=None, size_hint_y=None, height=150, width=150)
+            float_layout = FloatLayout(size_hint_x=None, size_hint_y=None, height=200, width=200)
             #image_view = Image(source='im')
-            btn = Button(text=file_name, size_hint_y=None, size_hint_x=None, height=150, width=150)
+            btn = Button(size_hint_y=None, size_hint_x=None, height=200, width=200, background_color=[1,1,1,1], background_normal='images/Craft/bottles/{name}'.format(name=file_name))
             layout.add_widget(btn)
-        scroll_view_one = ScrollView(size_hint=(1.0, None), height=150, pos_hint={'x':0.0,'y':0.3})
+        scroll_view_one = ScrollView(bar_color= [0,0,0,0], size_hint=(1.0, None), height=200, pos_hint={'x':0.0,'y':0.3})
         scroll_view_one.do_scroll_y=False
         scroll_view_one.do_scroll_x=True
         scroll_view_one.add_widget(layout)
@@ -198,7 +202,7 @@ class ProductScreen(Screen):
         #layout_two
 
     def on_click(self):
-        sm.transition = WipeTransition(direction='left')
+        sm.transition = SlideTransition(direction='right')
         sm.current = 'Product_Filter_Screen'
         #sm.transition = SlideTransition(direction="up")
     def click_product_detail_screen(self):
@@ -222,8 +226,134 @@ class ProductDetailScreen(Screen):
             sm.current = 'Product_Screen'
 
 class ProductFilterScreen(Screen):
+
+    stack_layout_one = StackLayout(orientation='lr-tb', spacing=0, size_hint=(1.0,0.9))
+    stack_layout_two = StackLayout(orientation='lr-tb', spacing=0, size_hint=(1.0,0.9), pos=(1200, 0))
+    stack_layout_three = StackLayout(orientation='lr-tb', spacing=0, size_hint=(1.0,0.9), pos=(1200, 0))
+    stack_layout_four = StackLayout(orientation='lr-tb', spacing=0, size_hint=(1.0,0.9), pos=(1200, 0))
+    # Light/Dark Beer Button
+    lightbeer_button = Button(text='Light Beer', size_hint=(.333,.3), background_normal='images/filter_item_background.jpg')
+    darkbeer_button = Button(text='Dark Beer', size_hint=(.333,.3), background_normal='images/filter_item_background.jpg')
+    skip_one_button = Button(text='Skip', size_hint=(.333,.3), background_color=[.3,.3,.3,1.0])
+    # Bottle/Can Beer Button
+    bottlebeer_button = Button(text='Bottle Beer', size_hint=(.333,.3), background_normal='images/filter_item_background.jpg')
+    canbeer_button = Button(text='Canned Beer', size_hint=(.333,.3), background_normal='images/filter_item_background.jpg')
+    skip_two_button = Button(text='Skip', size_hint=(.333,.3), background_color=[.3,.3,.3,1.0])
+    # Types of Beer Button
+    craftbeer_button = Button(text='Craft Beer', size_hint=(.333,.3), background_normal='images/filter_item_background.jpg')
+    domesticbeer_button = Button(text='Domestic Beer', size_hint=(.333,.3), background_normal='images/filter_item_background.jpg')
+    importbeer_button = Button(text='Import Beer', size_hint=(.333,.3), background_normal='images/filter_item_background.jpg')
+    specialtybeer_button = Button(text='ImportBeer', size_hint=(.333,.3), background_normal='images/filter_item_background.jpg')
+    skip_three_button = Button(text='Skip', size_hint=(.333,.3), background_color=[.3,.3,.3,1.0])
+    # Special Tags
+    sportsbeer_button = Button(text='Sports', size_hint=(.333,.3), background_normal='images/filter_item_background.jpg')
+    diningbeer_button = Button(text='Dining', size_hint=(.333,.3), background_normal='images/filter_item_background.jpg')
+    partybeer_button = Button(text='Party', size_hint=(.333,.3), background_normal='images/filter_item_background.jpg')
+    clubbeer_button = Button(text='Club', size_hint=(.333,.3), background_normal='images/filter_item_background.jpg')
+    skip_four_button = Button(text='Skip', size_hint=(.333,.3), background_color=[.3,.3,.3,1.0])
+
+    def stack_animation_complete(self, animation, widget):
+        self.remove_widget(widget)
+
+    def stack_one_item_select(self, btn):
+        out_anim = Animation(x=-700, y=0, t='in_out_back', duration=1.2)
+        out_anim.bind(on_complete=self.stack_animation_complete)
+        out_anim.start(self.stack_layout_one)
+        #Animation.cancel_all(self.stack_layout_one, 'x', 'y')
+        in_anim = Animation(x=0, y=0, t='in_out_back', duration=1.2)
+        in_anim.start(self.stack_layout_two)
+
+    def stack_two_item_select(self, btn):
+        out_anim = Animation(x=-700, y=0, t='in_out_back', duration=1.2)
+        out_anim.bind(on_complete=self.stack_animation_complete)
+        out_anim.start(self.stack_layout_two)
+        #Animation.cancel_all(self.stack_layout_one, 'x', 'y')
+        in_anim = Animation(x=0, y=0, t='in_out_back', duration=1.2)
+        in_anim.start(self.stack_layout_three)
+
+    def stack_three_item_select(self, btn):
+        out_anim = Animation(x=-700, y=0, t='in_out_back', duration=1.2)
+        out_anim.bind(on_complete=self.stack_animation_complete)
+        out_anim.start(self.stack_layout_three)
+        #Animation.cancel_all(self.stack_layout_one, 'x', 'y')
+        in_anim = Animation(x=0, y=0, t='in_out_back', duration=1.2)
+        in_anim.start(self.stack_layout_four)
+
+    def stack_four_item_select(self, btn):
+        self.remove_widget(self.stack_layout_four)
+        # Reset stack layout positions
+        self.stack_layout_one.pos=(0,0)
+        self.stack_layout_two.pos=(1200,0)
+        self.stack_layout_three.pos=(1200,0)
+        self.stack_layout_four.pos=(1200,0)
+    
+        sm.transition = SlideTransition(direction='left')
+        sm.current = 'Product_Screen'
+        # Re-add all the widgets
+        self.add_widget(self.stack_layout_one)
+        self.add_widget(self.stack_layout_two)
+        self.add_widget(self.stack_layout_three)
+        self.add_widget(self.stack_layout_four)
+
+        #out_anim = Animation(x=-700, y=0, t='in_out_back', duration=1.2)
+        #out_anim.bind(on_complete=self.stack_animation_complete)
+        #out_anim.start(self.stack_layout_one)
+        #Animation.cancel_all(self.stack_layout_one, 'x', 'y')
+        #in_anim = Animation(x=0, y=0, t='in_out_back', duration=1.2)
+        #in_anim.start(self.stack_layout_two)
+
     def __init__(self, **kwargs):
         super(ProductFilterScreen, self).__init__(**kwargs)
+        #StackLayout
+        #stack_layout = StackLayout(orientation='lr-tb', size_hint=(1.0,0.9))
+        #stack_layout = ObjectProperty(None)
+        self.lightbeer_button.bind(on_press=self.stack_one_item_select)
+        self.darkbeer_button.bind(on_press=self.stack_one_item_select)
+        self.skip_one_button.bind(on_press=self.stack_one_item_select)
+
+        self.bottlebeer_button.bind(on_press=self.stack_two_item_select)
+        self.canbeer_button.bind(on_press=self.stack_two_item_select)
+        self.skip_two_button.bind(on_press=self.stack_one_item_select)
+
+        self.craftbeer_button.bind(on_press=self.stack_three_item_select)
+        self.domesticbeer_button.bind(on_press=self.stack_three_item_select)
+        self.importbeer_button.bind(on_press=self.stack_three_item_select)
+        self.specialtybeer_button.bind(on_press=self.stack_three_item_select)
+        self.skip_three_button.bind(on_press=self.stack_one_item_select)
+
+        self.sportsbeer_button.bind(on_press=self.stack_four_item_select)
+        self.diningbeer_button.bind(on_press=self.stack_four_item_select)
+        self.partybeer_button.bind(on_press=self.stack_four_item_select)
+        self.clubbeer_button.bind(on_press=self.stack_four_item_select)
+        self.skip_four_button.bind(on_press=self.stack_one_item_select)
+
+
+
+        # First Stack View
+        self.stack_layout_one.add_widget(self.lightbeer_button)
+        self.stack_layout_one.add_widget(self.darkbeer_button)
+        self.stack_layout_one.add_widget(self.skip_one_button)
+        # Second Stack View
+        self.stack_layout_two.add_widget(self.bottlebeer_button)
+        self.stack_layout_two.add_widget(self.canbeer_button)
+        self.stack_layout_one.add_widget(self.skip_two_button)
+        # Third Stack View
+        self.stack_layout_three.add_widget(self.craftbeer_button)
+        self.stack_layout_three.add_widget(self.domesticbeer_button)
+        self.stack_layout_three.add_widget(self.importbeer_button)
+        self.stack_layout_three.add_widget(self.specialtybeer_button)
+        self.stack_layout_three.add_widget(self.skip_three_button)
+        # Four Stack View
+        self.stack_layout_four.add_widget(self.sportsbeer_button)
+        self.stack_layout_four.add_widget(self.diningbeer_button)
+        self.stack_layout_four.add_widget(self.partybeer_button)
+        self.stack_layout_four.add_widget(self.clubbeer_button)
+        self.stack_layout_four.add_widget(self.skip_four_button)
+
+        self.add_widget(self.stack_layout_one)
+        self.add_widget(self.stack_layout_two)   
+        self.add_widget(self.stack_layout_three)
+        self.add_widget(self.stack_layout_four)
 
     def click_main_screen(self):
         sm.transition = WipeTransition(direction='left')
