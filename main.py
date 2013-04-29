@@ -275,8 +275,18 @@ class ProductDetailScreen(Screen):
 
     def __init__(self, **kwargs):
         super(ProductDetailScreen, self).__init__(**kwargs)
-        button = Button(text='hi', size=(50, 50), size_hint=(None, None), pos_hint={'x':0.3,'y':0.3})
-        self.add_widget(button)
+        # File name of the beer selected
+        bottle_name = ('Coors_Lightbottle.jpg')
+        # Beer text description pulled from the given beer_name
+        beer_description = ('This is a description of the best beer in the world')
+
+        # Button definitions of visual wigets
+        logoButton = Button(size=(230, 80), size_hint=(None, None), pos_hint={'x':0.0,'y':0.85}, background_color=[1,1,1,1], background_normal='images/main_logo.jpg')
+        bottleButton = Button(size=(200, 283), size_hint=(None, None), pos_hint={'x':0.0,'y':0.38}, background_color=[1,1,1,1], background_normal='images/Domestic/bottles/{name}'.format(name=bottle_name))
+        descriptionButton = Button(text='{desc}'.format(desc=beer_description), pos_hint={'x':0.25,'y':0.375}, size_hint=(.5,.475), background_color=[.3,.3,.3,1.0])
+        self.add_widget(logoButton)
+        self.add_widget(bottleButton)
+        self.add_widget(descriptionButton)
 
     def animate(self):
         anim = Animation(x=100, y=100)
