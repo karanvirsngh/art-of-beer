@@ -399,8 +399,8 @@ class ProductFilterScreen(Screen):
     darkbeer_button = Button(text='Dark Beer', size_hint=(.333,.3), background_normal='images/filter_item_background.jpg')
     skip_one_button = Button(text='Skip', size_hint=(.333,.3), background_color=[.3,.3,.3,1.0])
     # Bottle/Can Beer Button
-    bottlebeer_button = Button(text='Bottle Beer', size_hint=(.333,.3), background_normal='images/filter_item_background.jpg')
-    canbeer_button = Button(text='Canned Beer', size_hint=(.333,.3), background_normal='images/filter_item_background.jpg')
+    bottlebeer_button = Button(text='Bottle Beer', size_hint=(.333,.3), background_normal='images/filter_button_gradient.jpg')
+    canbeer_button = Button(text='Canned Beer', size_hint=(.333,.3), background_normal='images/filter_button_gradient.jpg')
     skip_two_button = Button(text='Skip', size_hint=(.333,.3), background_color=[.3,.3,.3,1.0])
     # Types of Beer Button
     craftbeer_button = Button(text='Craft Beer', size_hint=(.333,.3), background_normal='images/filter_item_background.jpg')
@@ -482,7 +482,8 @@ class ProductFilterScreen(Screen):
         print resultt
         #PERFORM SQL QUERY HERE
 
-        cursor.execute('SELECT name FROM beers where bottle=%d'%(resultt))
+        #cursor.execute('SELECT name FROM beers where bottle=%d & sports=%d'%(resultt,result2))
+
         allentries=cursor.fetchall()
         print allentries
         #---------------------------------------------------
