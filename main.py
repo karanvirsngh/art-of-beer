@@ -35,58 +35,58 @@ from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition, SwapT
                               #host='SQL09.FREEMYSQL.NET',
                               #database='karant')
 
-#cursor = cnx.cursor()
+# cursor = cnx.cursor()
 
-#cursor.execute("SELECT * FROM Writers")
-#karanvir="oi"
-#print cursor
-#for Name in cursor:
+# cursor.execute("SELECT * FROM Writers")
+# karanvir="oi"
+# print cursor
+# for Name in cursor:
 #    print Name[1]
 #    karanvir=Name[1]
 
 #sm.add_widget(ProductDetailScreen(name='Product_Detail_Screen'))
-    #sm.add_widget(ProductFilterScreen(name='Product_Filter_Screen'))
+#    sm.add_widget(ProductFilterScreen(name='Product_Filter_Screen'))
 #sm.current = 'Main_Screen'
-# Create the manager
+#Create the manager
 #sm = ScreenManager()
-# Add few screens
+#Add few screens
 #for i in xrange(4):
- #   screen = Screen(name='Title %d' % i)
- #   sm.add_widget(screen)
+#   screen = Screen(name='Title %d' % i)
+#   sm.add_widget(screen)
 
-# By default, the first screen added into the ScreenManager will be
-# displayed. Then, you can change to another screen:
+#By default, the first screen added into the ScreenManager will be
+#displayed. Then, you can change to another screen:
 
-# Let's display the screen named 'Title 2'
-# The transition will be automatically used.
-#sm.current = 'Title 2'
+#Let's display the screen named 'Title 2'
+#The transition will be automatically used.
+# sm.current = 'Title 2'
 
-#Sqllite
-conn = sqlite3.connect("aob.db") # or use :memory: to put it in RAM
-cursor = conn.cursor()
+# Sqllite
+# conn = sqlite3.connect("aob.db") # or use :memory: to put it in RAM
+# cursor = conn.cursor()
 
 
-if(sys.argv[1]=="create"):
-    #create a table
-    cursor.execute("""CREATE TABLE beers
-                     (name text, des text,\
-                     dark boolean, light boolean,\
-                     can boolean, bottle boolean, keg boolean,\
-                     craft boolean, domestic boolean, import boolean, specialty boolean,\
-                     sports boolean, dining boolean, beach boolean,\
-                     party boolean, club boolean,\
-                     tags text)\
-                    """)
-    # insert some data
-    cursor.execute("INSERT INTO beers VALUES\
-                 ('sharps', 'fosters-txt',\
-                    '1','0','0','1','0','0','0','0','1','0','0','1','1','0','tag1')")
-    cursor.execute("INSERT INTO beers VALUES\
-                 ('fosters', 'foster-txt',\
-                    '0','1','0','1','0','0','0','0','1','1','0','1','1','0','tag2')")
+# if(sys.argv[1]=="create"):
+#     #create a table
+#     cursor.execute("""CREATE TABLE beers
+#                      (name text, des text,\
+#                      dark boolean, light boolean,\
+#                      can boolean, bottle boolean, keg boolean,\
+#                      craft boolean, domestic boolean, import boolean, specialty boolean,\
+#                      sports boolean, dining boolean, beach boolean,\
+#                      party boolean, club boolean,\
+#                      tags text)\
+#                     """)
+#     # insert some data
+#     cursor.execute("INSERT INTO beers VALUES\
+#                  ('sharps', 'fosters-txt',\
+#                     '1','0','0','1','0','0','0','0','1','0','0','1','1','0','tag1')")
+#     cursor.execute("INSERT INTO beers VALUES\
+#                  ('fosters', 'foster-txt',\
+#                     '0','1','0','1','0','0','0','0','1','1','0','1','1','0','tag2')")
 
-    # save data to database
-    conn.commit()
+#     # save data to database
+#     conn.commit()
 
 Builder.load_string('''
 #:kivy 1.0.9
@@ -142,7 +142,7 @@ Builder.load_string('''
                 allow_stretch: True
                 keep_ratio: False
                 size: root.width, root.height
-                source: 'images/button_gradient.jpg'
+                source: 'images/navigation_bar_gradient.jpg'
             Button:
                 text: 'Go back'
                 size_hint: None, None
@@ -210,32 +210,41 @@ Builder.load_string('''
                 source: 'images/product_list_gradient.jpg'
 
 <ProductFilterScreen>:
-    BoxLayout:
-        spacing: 10
+    FloatLayout:
+        #spacing: 10
         size: root.width, root.height
         canvas:
             Color:
                 rgb: 1, 1, 1
             Rectangle:
                 size: root.size
-        Button:
-            text: 'Main Menu'
-            size_hint: None, None
-            size: 250, 50
-            pos_hint: {'x':0.0, 'y':0.0}
-            on_press: root.click_main_screen()
-        Button:
-            text: 'Product List Screen'
-            size_hint: None, None
-            size: 250, 50
-            pos_hint: {'x':0.8, 'y':0.0}
-            on_press: root.click_product_list_screen()
-        Button:
-            text: 'Sample Detail Screen'
-            size_hint: None, None
-            size: 250, 50
-            pos_hint: {'x':1.6, 'y':0.0}
-            on_press: root.click_product_detail_screen()
+        RelativeLayout:
+            size_x: root.width
+            size_hint_y: 0.2
+            pos: 0, 630
+            Image:
+                allow_stretch: True
+                keep_ratio: False
+                size: root.width, root.height
+                source: 'images/navigation_bar_gradient.jpg'
+            Button:
+                text: 'Main Menu'
+                size_hint: None, None
+                size: 250, 50
+                pos_hint: {'x':0.0, 'y':0.3}
+                on_press: root.click_main_screen()
+            Button:
+                text: 'Product List Screen'
+                size_hint: None, None
+                size: 250, 50
+                pos_hint: {'x':0.8, 'y':0.3}
+                on_press: root.click_product_list_screen()
+            Button:
+                text: 'Sample Detail Screen'
+                size_hint: None, None
+                size: 250, 50
+                pos_hint: {'x':1.6, 'y':0.3}
+                on_press: root.click_product_detail_screen()
 ''')
 
 class ProductScreen(Screen):
@@ -353,7 +362,7 @@ class ProductDetailScreen(Screen):
         grid_one_layout.bind(minimum_width=grid_one_layout.setter('width'))
         for tag_name in tag_list:
             relative_one_layout = AnchorLayout(size_hint_x=None, size_hint_y=None, height=30, width=100)
-            btn = Button(size_hint_y=None, size_hint_x=None, height=30, width=100, background_color=[1,1,1,1], background_normal='images/filter_item_background.jpg')
+            btn = Button(size_hint_y=None, size_hint_x=None, height=30, width=100, background_color=[1,1,1,1], background_normal='images/filter_button_gradient.jpg')
             label = Label(text=tag_name, color=[0,0,0,1], size_hint=(None, None), height=30, width=relative_one_layout.width, halign='center', pos_hint={'x':0,'y':0})
             relative_one_layout.add_widget(btn)
             relative_one_layout.add_widget(label)
@@ -390,33 +399,37 @@ class ProductFilterScreen(Screen):
     query_dict = {'light':0, 'dark':0, 'bottle':0, 'can':0, 'craft':0, 'domestic':0, 
                 'import':0, 'specialty':0, 'sport':0, 'dining':0, 'party':0, 'club':0}
     #Stacklayout for each selection screen            
+    box_layout_one = BoxLayout(size_hint=(1.0, 0.2), pos=(0, 300), spacing=2)
+    box_layout_two = BoxLayout(size_hint=(1.0, 0.2), pos=(1300, 300), spacing=2)
+    box_layout_three = BoxLayout(size_hint=(1.0, 0.2), pos=(1300, 300), spacing=2)
+    box_layout_four = BoxLayout(size_hint=(1.0, 0.2), pos=(1300, 300), spacing=2)
     stack_layout_one = StackLayout(orientation='lr-tb', spacing=0, size_hint=(1.0,0.8))
-    stack_layout_two = StackLayout(orientation='lr-tb', spacing=0, size_hint=(1.0,0.8), pos=(1200, 0))
-    stack_layout_three = StackLayout(orientation='lr-tb', spacing=0, size_hint=(1.0,0.8), pos=(1200, 0))
-    stack_layout_four = StackLayout(orientation='lr-tb', spacing=0, size_hint=(1.0,0.8), pos=(1200, 0))
+    stack_layout_two = StackLayout(orientation='lr-tb', spacing=0, size_hint=(1.0,0.8), pos=(1300, 0))
+    stack_layout_three = StackLayout(orientation='lr-tb', spacing=0, size_hint=(1.0,0.8), pos=(1300, 0))
+    stack_layout_four = StackLayout(orientation='lr-tb', spacing=0, size_hint=(1.0,0.8), pos=(1300, 0))
     # Light/Dark Beer Button
-    lightbeer_button = Button(text='Light Beer', size_hint=(.333,.3), background_normal='images/filter_item_background.jpg')
-    darkbeer_button = Button(text='Dark Beer', size_hint=(.333,.3), background_normal='images/filter_item_background.jpg')
-    skip_one_button = Button(text='Skip', size_hint=(.333,.3), background_color=[.3,.3,.3,1.0])
+    lightbeer_button = Button(text='Light Beer', color=[0,0,0,1], size_hint=(1.0,1.0), background_normal='images/filter_button_gradient.jpg')
+    darkbeer_button = Button(text='Dark Beer', color=[0,0,0,1], size_hint=(1.0,1.0), background_normal='images/filter_button_gradient.jpg')
+    skip_one_button = Button(text='Skip', size_hint=(1.0,1.0), background_color=[.3,.3,.3,1.0])
     # Bottle/Can Beer Button
-    bottlebeer_button = Button(text='Bottle Beer', size_hint=(.333,.3), background_normal='images/filter_button_gradient.jpg')
-    canbeer_button = Button(text='Canned Beer', size_hint=(.333,.3), background_normal='images/filter_button_gradient.jpg')
-    skip_two_button = Button(text='Skip', size_hint=(.333,.3), background_color=[.3,.3,.3,1.0])
+    bottlebeer_button = Button(text='Bottle Beer', color=[0,0,0,1], size_hint=(1.0,1.0), background_normal='images/filter_button_gradient.jpg')
+    canbeer_button = Button(text='Canned Beer', color=[0,0,0,1], size_hint=(1.0,1.0), background_normal='images/filter_button_gradient.jpg')
+    skip_two_button = Button(text='Skip', size_hint=(1.0,1.0), background_color=[.3,.3,.3,1.0])
     # Types of Beer Button
-    craftbeer_button = Button(text='Craft Beer', size_hint=(.333,.3), background_normal='images/filter_item_background.jpg')
-    domesticbeer_button = Button(text='Domestic Beer', size_hint=(.333,.3), background_normal='images/filter_item_background.jpg')
-    importbeer_button = Button(text='Import Beer', size_hint=(.333,.3), background_normal='images/filter_item_background.jpg')
-    specialtybeer_button = Button(text='Specialty Beer', size_hint=(.333,.3), background_normal='images/filter_item_background.jpg')
-    skip_three_button = Button(text='Skip', size_hint=(.333,.3), background_color=[.3,.3,.3,1.0])
+    craftbeer_button = Button(text='Craft Beer', color=[0,0,0,1], size_hint=(1.0,1.0), background_normal='images/filter_button_gradient.jpg')
+    domesticbeer_button = Button(text='Domestic Beer', color=[0,0,0,1], size_hint=(1.0,1.0), background_normal='images/filter_button_gradient.jpg')
+    importbeer_button = Button(text='Import Beer', color=[0,0,0,1], size_hint=(1.0,1.0), background_normal='images/filter_button_gradient.jpg')
+    specialtybeer_button = Button(text='Specialty Beer', color=[0,0,0,1], size_hint=(1.0,1.0), background_normal='images/filter_button_gradient.jpg')
+    skip_three_button = Button(text='Skip', size_hint=(1.0,1.0), background_color=[.3,.3,.3,1.0])
     # Special Tags
-    sportsbeer_button = Button(text='Sports', size_hint=(.333,.3), background_normal='images/filter_item_background.jpg')
-    diningbeer_button = Button(text='Dining', size_hint=(.333,.3), background_normal='images/filter_item_background.jpg')
-    partybeer_button = Button(text='Party', size_hint=(.333,.3), background_normal='images/filter_item_background.jpg')
-    clubbeer_button = Button(text='Club', size_hint=(.333,.3), background_normal='images/filter_item_background.jpg')
-    skip_four_button = Button(text='Skip', size_hint=(.333,.3), background_color=[.3,.3,.3,1.0])
+    sportsbeer_button = Button(text='Sports', color=[0,0,0,1], size_hint=(1.0,1.0), background_normal='images/filter_button_gradient.jpg')
+    diningbeer_button = Button(text='Dining', color=[0,0,0,1], size_hint=(1.0,1.0), background_normal='images/filter_button_gradient.jpg')
+    partybeer_button = Button(text='Party', color=[0,0,0,1], size_hint=(1.0,1.0), background_normal='images/filter_button_gradient.jpg')
+    clubbeer_button = Button(text='Club', color=[0,0,0,1], size_hint=(1.0,1.0), background_normal='images/filter_button_gradient.jpg')
+    skip_four_button = Button(text='Skip', size_hint=(1.0,1.0), background_color=[.3,.3,.3,1.0])
 
     def stack_animation_complete(self, animation, widget):
-        widget.pos=(0, 0)
+        widget.pos=(1300, 300)
 
     def stack_one_item_select(self, btn):
         # Check What's Selected
@@ -424,12 +437,12 @@ class ProductFilterScreen(Screen):
             self.query_dict['light'] = 1
         elif btn.text == 'Dark Beer':
             self.query_dict['dark'] = 1
-        out_anim = Animation(x=-700, y=0, t='in_out_back', duration=1.0)
+        out_anim = Animation(x=-700, y=300, t='in_out_back', duration=1.0)
         out_anim.bind(on_complete=self.stack_animation_complete)
-        out_anim.start(self.stack_layout_one)
+        out_anim.start(self.box_layout_one)
         #Animation.cancel_all(self.stack_layout_one, 'x', 'y')
-        in_anim = Animation(x=0, y=0, t='in_out_back', duration=1.2)
-        in_anim.start(self.stack_layout_two)
+        in_anim = Animation(x=0, y=300, t='in_out_back', duration=1.2)
+        in_anim.start(self.box_layout_two)
 
     def stack_two_item_select(self, btn):
         # Check What's Selected
@@ -437,12 +450,12 @@ class ProductFilterScreen(Screen):
             self.query_dict['bottle'] = 1
         elif btn.text == 'Canned Beer':
             self.query_dict['can'] = 1
-        out_anim = Animation(x=-700, y=0, t='in_out_back', duration=1.0)
+        out_anim = Animation(x=-700, y=300, t='in_out_back', duration=1.0)
         out_anim.bind(on_complete=self.stack_animation_complete)
-        out_anim.start(self.stack_layout_two)
+        out_anim.start(self.box_layout_two)
         #Animation.cancel_all(self.stack_layout_one, 'x', 'y')
-        in_anim = Animation(x=0, y=0, t='in_out_back', duration=1.2)
-        in_anim.start(self.stack_layout_three)
+        in_anim = Animation(x=0, y=300, t='in_out_back', duration=1.2)
+        in_anim.start(self.box_layout_three)
 
     def stack_three_item_select(self, btn):
         # Check What's Selected
@@ -454,12 +467,12 @@ class ProductFilterScreen(Screen):
             self.query_dict['import'] = 1
         elif btn.text == 'Specialty Beer':
             self.query_dict['specialty'] = 1
-        out_anim = Animation(x=-700, y=0, t='in_out_back', duration=1.0)
+        out_anim = Animation(x=-700, y=300, t='in_out_back', duration=1.0)
         out_anim.bind(on_complete=self.stack_animation_complete)
-        out_anim.start(self.stack_layout_three)
+        out_anim.start(self.box_layout_three)
         #Animation.cancel_all(self.stack_layout_one, 'x', 'y')
-        in_anim = Animation(x=0, y=0, t='in_out_back', duration=1.2)
-        in_anim.start(self.stack_layout_four)
+        in_anim = Animation(x=0, y=300, t='in_out_back', duration=1.2)
+        in_anim.start(self.box_layout_four)
 
     def stack_four_item_select(self, btn):
         if btn.text == 'Sports':
@@ -472,10 +485,10 @@ class ProductFilterScreen(Screen):
             self.query_dict['club'] = 1
         
         # Reset stack layout positions
-        self.stack_layout_one.pos=(0,0)
-        self.stack_layout_two.pos=(1200,0)
-        self.stack_layout_three.pos=(1200,0)
-        self.stack_layout_four.pos=(1200,0)
+        self.box_layout_one.pos=(0,300)
+        #self.box_layout_two.pos=(1300,400)
+        #self.box_layout_three.pos=(1300,400)
+        self.box_layout_four.pos=(1300,300)
         for i in self.query_dict:
             print i + str(self.query_dict[i])
         resultt= self.query_dict['bottle']
@@ -484,8 +497,8 @@ class ProductFilterScreen(Screen):
 
         #cursor.execute('SELECT name FROM beers where bottle=%d & sports=%d'%(resultt,result2))
 
-        allentries=cursor.fetchall()
-        print allentries
+        # allentries=cursor.fetchall()
+        # print allentries
         #---------------------------------------------------
         #RESET QUERY DIRECTIONARY
         for k in self.query_dict.keys():
@@ -532,30 +545,30 @@ class ProductFilterScreen(Screen):
         self.skip_four_button.bind(on_press=self.stack_four_item_select)
 
         # First Stack View
-        self.stack_layout_one.add_widget(self.lightbeer_button)
-        self.stack_layout_one.add_widget(self.darkbeer_button)
-        self.stack_layout_one.add_widget(self.skip_one_button)
+        self.box_layout_one.add_widget(self.lightbeer_button)
+        self.box_layout_one.add_widget(self.darkbeer_button)
+        self.box_layout_one.add_widget(self.skip_one_button)
         # Second Stack View
-        self.stack_layout_two.add_widget(self.bottlebeer_button)
-        self.stack_layout_two.add_widget(self.canbeer_button)
-        self.stack_layout_two.add_widget(self.skip_two_button)
+        self.box_layout_two.add_widget(self.bottlebeer_button)
+        self.box_layout_two.add_widget(self.canbeer_button)
+        self.box_layout_two.add_widget(self.skip_two_button)
         # Third Stack View
-        self.stack_layout_three.add_widget(self.craftbeer_button)
-        self.stack_layout_three.add_widget(self.domesticbeer_button)
-        self.stack_layout_three.add_widget(self.importbeer_button)
-        self.stack_layout_three.add_widget(self.specialtybeer_button)
-        self.stack_layout_three.add_widget(self.skip_three_button)
+        self.box_layout_three.add_widget(self.craftbeer_button)
+        self.box_layout_three.add_widget(self.domesticbeer_button)
+        self.box_layout_three.add_widget(self.importbeer_button)
+        self.box_layout_three.add_widget(self.specialtybeer_button)
+        self.box_layout_three.add_widget(self.skip_three_button)
         # Four Stack View
-        self.stack_layout_four.add_widget(self.sportsbeer_button)
-        self.stack_layout_four.add_widget(self.diningbeer_button)
-        self.stack_layout_four.add_widget(self.partybeer_button)
-        self.stack_layout_four.add_widget(self.clubbeer_button)
-        self.stack_layout_four.add_widget(self.skip_four_button)
+        self.box_layout_four.add_widget(self.sportsbeer_button)
+        self.box_layout_four.add_widget(self.diningbeer_button)
+        self.box_layout_four.add_widget(self.partybeer_button)
+        self.box_layout_four.add_widget(self.clubbeer_button)
+        self.box_layout_four.add_widget(self.skip_four_button)
 
-        self.add_widget(self.stack_layout_one)
-        self.add_widget(self.stack_layout_two)   
-        self.add_widget(self.stack_layout_three)
-        self.add_widget(self.stack_layout_four)
+        self.add_widget(self.box_layout_one)
+        self.add_widget(self.box_layout_two)   
+        self.add_widget(self.box_layout_three)
+        self.add_widget(self.box_layout_four)
 
     def click_main_screen(self):
         sm.transition = WipeTransition(direction='left')
