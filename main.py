@@ -1,6 +1,8 @@
 import kivy
 import os
 import time
+import re
+
 kivy.require('1.0.9')
 from kivy.lang import Builder
 from kivy.uix.gridlayout import GridLayout
@@ -77,9 +79,23 @@ Builder.load_string('''
             italic: True
             color: [0,0,0,1]
             font_size: '20sp'
+<<<<<<< HEAD
             pos_hint: {'x':0.35,'y':0.5}
             size_hint: .3, .1
 
+=======
+            background_color: (1, 1, 1, .3)
+            color: (0, 0, 0, 1)
+            on_press: root.on_click()
+        RelativeLayout:
+            size_x: root.width
+            size_y: root.height
+            Image:
+                allow_stretch: True
+                keep_ratio: False
+                size: root.width, root.height
+                source: 'images/SplashScreen.jpg'
+>>>>>>> 0d3c1388fe3245d4db13442dd3d9f359542e2370
            
 <ProductScreen>:
     FloatLayout:
@@ -130,7 +146,6 @@ Builder.load_string('''
                 pos_hint: {'x':0.8, 'y':0.3}
                 on_press: root.click_product_detail_screen()
 
-
 [ProductItem@SelectableView+BoxLayout]:
     size_hint_y: ctx.size_hint_y
     size_hint_x: ctx.size_hint_x
@@ -145,10 +160,6 @@ Builder.load_string('''
     #    text: ctx.text
     #    is_selected: ctx.is_selected
 
-
-
-
-
 <ProductDetailScreen>:
     FloatLayout:
         size: root.width, root.height
@@ -158,11 +169,35 @@ Builder.load_string('''
             Rectangle:
                 size: root.size
         Button:
-            text: 'Product Screen'
+            text: 'Main Menu'
             size_hint: None, None
             size: 250, 50
             pos_hint: {'x':0.0, 'y':0.0}
+            on_press: root.click_main_screen()
+        Button:
+            text: 'Product Screen'
+            size_hint: None, None
+            size: 250, 50
+            pos_hint: {'x':0.4, 'y':0.0}
             on_press: root.click_product_screen()
+        RelativeLayout:
+            size_x: root.width
+            size_hint_y: 0.05
+            pos_hint: {'x':0, 'y':0.828}
+            Image:
+                allow_stretch: True
+                keep_ratio: False
+                size: root.width, root.height
+                source: 'images/product_list_gradient.jpg'
+        RelativeLayout:
+            size_x: root.width
+            size_hint_y: 0.05
+            pos_hint: {'x':0.0, 'y':0.305}
+            Image:
+                allow_stretch: True
+                keep_ratio: False
+                size: root.width, root.height
+                source: 'images/product_list_gradient.jpg'
 
 <ProductFilterScreen>:
     BoxLayout:
@@ -185,6 +220,12 @@ Builder.load_string('''
             size: 250, 50
             pos_hint: {'x':0.8, 'y':0.0}
             on_press: root.click_product_list_screen()
+        Button:
+            text: 'Sample Detail Screen'
+            size_hint: None, None
+            size: 250, 50
+            pos_hint: {'x':1.6, 'y':0.0}
+            on_press: root.click_product_detail_screen()
 ''')
 
 class ProductScreen(Screen):
@@ -275,13 +316,59 @@ class ProductDetailScreen(Screen):
 
     def __init__(self, **kwargs):
         super(ProductDetailScreen, self).__init__(**kwargs)
-        button = Button(text='hi', size=(50, 50), size_hint=(None, None), pos_hint={'x':0.3,'y':0.3})
-        self.add_widget(button)
+        # File name of the beer selected
+        # NEEDS TO BE SET
+        bottle_name = ('Coors_Lightbottle.jpg')
+        # Beer name from the given bottle name
+        beer_name = re.sub('[^a-zA-Z0-9\n]', ' ', bottle_name)
+        beer_name = beer_name[:-10]
+        # Beer text description pulled from the given beer_name
+        # NEEDS TO BE SET
+        beer_description = ('This is a description of the best beer in the world')
+        # Button definitions of visual wigets
+        logoButton = Button(size=(200, 70), size_hint=(None, None), pos_hint={'x':0.0,'y':0.88}, background_color=[1,1,1,1], background_normal='images/main_logo.jpg')
+        nameButton = Button(text='{name}'.format(name=beer_name), font_size=(30), color=[255,0,0,1], pos_hint={'x':0.25,'y':0.878}, size_hint=(.5,.12), background_color=[.3,.3,.3,1.0])
+        bottleButton = Button(size=(200, 283), size_hint=(None, None), pos_hint={'x':0.0,'y':0.355}, background_color=[1,1,1,1], background_normal='images/Domestic/bottles/{name}'.format(name=bottle_name))
+        descriptionButton = Button(text='{desc}'.format(desc=beer_description), pos_hint={'x':0.25,'y':0.355}, size_hint=(.5,.475), background_color=[.3,.3,.3,1.0])
+        # Get all the tags for the given beer
+        # NEEDS TO BE SET
+        beer_tags = 'sports football stadium party coors molson light beer mountains'
+        tag_list = []
+        for i in beer_tags.split():
+            tag_list.append(i)
+        # Horizontal Scrollable View
+        grid_one_layout = GridLayout(cols=30, spacing=5, size_hint_x=None)
+        # Make sure the height is such that there is something to scroll.
+        grid_one_layout.bind(minimum_width=grid_one_layout.setter('width'))
+        for tag_name in tag_list:
+            relative_one_layout = AnchorLayout(size_hint_x=None, size_hint_y=None, height=30, width=100)
+            btn = Button(size_hint_y=None, size_hint_x=None, height=30, width=100, background_color=[1,1,1,1], background_normal='images/filter_item_background.jpg')
+            label = Label(text=tag_name, color=[0,0,0,1], size_hint=(None, None), height=30, width=relative_one_layout.width, halign='center', pos_hint={'x':0,'y':0})
+            relative_one_layout.add_widget(btn)
+            relative_one_layout.add_widget(label)
+            grid_one_layout.add_widget(relative_one_layout)
+
+        scroll_view_one = ScrollView(bar_color= [0,0,0,0], size_hint=(1.0, None), height=30, pos_hint={'x':0.0,'y':0.25})
+        scroll_view_one.do_scroll_y=False
+        scroll_view_one.do_scroll_x=True
+        scroll_view_one.add_widget(grid_one_layout)
+        self.add_widget(scroll_view_one)
+
+
+        # Add wigets to the product detail page
+        self.add_widget(logoButton)
+        self.add_widget(bottleButton)
+        self.add_widget(nameButton)
+        self.add_widget(descriptionButton)
 
     def animate(self):
         anim = Animation(x=100, y=100)
         anim.start(button)
         #self.add_widget(button)
+
+    def click_main_screen(self):
+        sm.transition = WipeTransition(direction='left')
+        sm.current = 'Main_Screen'
 
     def click_product_screen(self):
             sm.transition = WipeTransition(direction='left')
@@ -459,6 +546,10 @@ class ProductFilterScreen(Screen):
     def click_product_list_screen(self):
         sm.transition = WipeTransition(direction='right')
         sm.current = 'Product_Screen'
+
+    def click_product_detail_screen(self):
+        sm.transition = WipeTransition(direction='right')
+        sm.current = 'Product_Detail_Screen'
 
 class MainScreen(Screen):
     float_layout = AnchorLayout(size_hint=(1.0, 0.4), pos=(0,0))
