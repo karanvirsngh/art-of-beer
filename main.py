@@ -136,8 +136,8 @@ Builder.load_string('''
 
         RelativeLayout:
             size_x: root.width
-            size_hint_y: 0.2
-            pos: 0, 630
+            size_hint_y: 0.15
+            pos: 0, 660
             Image:
                 allow_stretch: True
                 keep_ratio: False
@@ -149,6 +149,9 @@ Builder.load_string('''
                 size: 150, 50
                 pos_hint: {'x':0.0, 'y':0.3}
                 on_press: root.on_click()
+                background_normal: 'images/rect_button.png'
+                allow_stretch: True
+                keep_ratio: False
             Button:
                 text: 'Product Detail'
                 size_hint: None, None
@@ -175,39 +178,40 @@ Builder.load_string('''
         size: root.width, root.height
         canvas:
             Color:
-                rgb: 0.3, 0.3, 0.3
+                rgb: 1.0, 1.0, 1.0
             Rectangle:
+                source: 'images/detail_background.png'
                 size: root.size
-        Button:
-            text: 'Main Menu'
-            size_hint: None, None
-            size: 250, 50
-            pos_hint: {'x':0.0, 'y':0.0}
-            on_press: root.click_main_screen()
-        Button:
-            text: 'Product Screen'
-            size_hint: None, None
-            size: 250, 50
-            pos_hint: {'x':0.4, 'y':0.0}
-            on_press: root.click_product_screen()
         RelativeLayout:
             size_x: root.width
-            size_hint_y: 0.05
-            pos_hint: {'x':0, 'y':0.828}
+            size_hint_y: 0.15
+            pos: 0, 660
             Image:
                 allow_stretch: True
                 keep_ratio: False
                 size: root.width, root.height
-                source: 'images/product_list_gradient.jpg'
-        RelativeLayout:
-            size_x: root.width
-            size_hint_y: 0.05
-            pos_hint: {'x':0.0, 'y':0.305}
-            Image:
-                allow_stretch: True
-                keep_ratio: False
-                size: root.width, root.height
-                source: 'images/product_list_gradient.jpg'
+                source: 'images/navigation_bar_gradient.jpg'
+            Button:
+                text: 'Main Menu'
+                size_hint: None, None
+                size: 250, 50
+                pos_hint: {'x':0.0, 'y':0.3}
+                on_press: root.click_main_screen()
+            Button:
+                text: 'Product Screen'
+                size_hint: None, None
+                size: 250, 50
+                pos_hint: {'x':0.8, 'y':0.3}
+                on_press: root.click_product_screen()
+        # RelativeLayout:
+        #     size_x: root.width
+        #     size_hint_y: 0.05
+        #     pos_hint: {'x':0.0, 'y':0.305}
+        #     Image:
+        #         allow_stretch: True
+        #         keep_ratio: False
+        #         size: root.width, root.height
+        #         source: 'images/product_list_gradient.jpg'
 
 <ProductFilterScreen>:
     FloatLayout:
@@ -220,8 +224,8 @@ Builder.load_string('''
                 size: root.size
         RelativeLayout:
             size_x: root.width
-            size_hint_y: 0.2
-            pos: 0, 630
+            size_hint_y: 0.15
+            pos: 0, 660
             Image:
                 allow_stretch: True
                 keep_ratio: False
@@ -245,6 +249,15 @@ Builder.load_string('''
                 size: 250, 50
                 pos_hint: {'x':1.6, 'y':0.3}
                 on_press: root.click_product_detail_screen()
+        RelativeLayout:
+            size_x: root.width
+            size_hint_y: 0.15
+            pos: 0, 0
+            Image:
+                allow_stretch: True
+                keep_ratio: False
+                size: root.width, root.height
+                source: 'images/navigation_bar_gradient.jpg'
 ''')
 
 class ProductScreen(Screen):
@@ -346,10 +359,12 @@ class ProductDetailScreen(Screen):
         # NEEDS TO BE SET
         beer_description = ('This is a description of the best beer in the world')
         # Button definitions of visual wigets
-        logoButton = Button(size=(200, 70), size_hint=(None, None), pos_hint={'x':0.0,'y':0.88}, background_color=[1,1,1,1], background_normal='images/main_logo.jpg')
-        nameButton = Button(text='{name}'.format(name=beer_name), font_size=(30), color=[255,0,0,1], pos_hint={'x':0.25,'y':0.878}, size_hint=(.5,.12), background_color=[.3,.3,.3,1.0])
-        bottleButton = Button(size=(200, 283), size_hint=(None, None), pos_hint={'x':0.0,'y':0.355}, background_color=[1,1,1,1], background_normal='images/Domestic/bottles/{name}'.format(name=bottle_name))
-        descriptionButton = Button(text='{desc}'.format(desc=beer_description), pos_hint={'x':0.25,'y':0.355}, size_hint=(.5,.475), background_color=[.3,.3,.3,1.0])
+        logoImage = Image(size=(200, 70), size_hint=(None, None), pos_hint={'x':0.12,'y':0.72}, source='images/main_logo.jpg', allow_stretch=True, keep_ratio=True)
+        nameLabel = Label(text='{name}'.format(name=beer_name), font_size=(30), color=[1,0,0,1], pos_hint={'x':0.25,'y':0.878}, size_hint=(.5,.12))
+        bottleImage = Image(size=(300, 425), size_hint=(None, None), pos=(100,150), source='images/Domestic/bottles/{name}'.format(name=bottle_name), allow_stretch=True, keep_ratio=True)
+        descriptionLabel = Button(text='{desc}'.format(desc=beer_description), pos_hint={'x':0.5,'y':0.0}, size_hint=(1.0,1.0), background_color=[.3,.3,.3,1.0])
+        description_layout = BoxLayout(orietation='vertical', size_hint=(.5,.85), pos_hint={'x':0.5,'y':0.0}, background_color=[.3,.3,.3,1.0])
+        description_layout.add_widget(descriptionLabel)
         # Get all the tags for the given beer
         # NEEDS TO BE SET
         beer_tags = 'sports football stadium party coors molson light beer mountains'
@@ -362,24 +377,24 @@ class ProductDetailScreen(Screen):
         grid_one_layout.bind(minimum_width=grid_one_layout.setter('width'))
         for tag_name in tag_list:
             relative_one_layout = AnchorLayout(size_hint_x=None, size_hint_y=None, height=30, width=100)
-            btn = Button(size_hint_y=None, size_hint_x=None, height=30, width=100, background_color=[1,1,1,1], background_normal='images/filter_button_gradient.jpg')
+            btn = Button(size_hint_y=None, size_hint_x=None, height=30, width=100, background_color=[1,1,1,1])
             label = Label(text=tag_name, color=[0,0,0,1], size_hint=(None, None), height=30, width=relative_one_layout.width, halign='center', pos_hint={'x':0,'y':0})
             relative_one_layout.add_widget(btn)
             relative_one_layout.add_widget(label)
             grid_one_layout.add_widget(relative_one_layout)
 
-        scroll_view_one = ScrollView(bar_color= [0,0,0,0], size_hint=(1.0, None), height=30, pos_hint={'x':0.0,'y':0.25})
+        scroll_view_one = ScrollView(bar_color= [0,0,0,0], size_hint=(1.0, None), height=30, pos_hint={'x':0.0,'y':0.0})
         scroll_view_one.do_scroll_y=False
         scroll_view_one.do_scroll_x=True
         scroll_view_one.add_widget(grid_one_layout)
-        self.add_widget(scroll_view_one)
+        #self.add_widget(scroll_view_one)
 
 
         # Add wigets to the product detail page
-        self.add_widget(logoButton)
-        self.add_widget(bottleButton)
-        self.add_widget(nameButton)
-        self.add_widget(descriptionButton)
+        self.add_widget(logoImage)
+        self.add_widget(bottleImage)
+        self.add_widget(nameLabel)
+        self.add_widget(description_layout)
 
     def animate(self):
         anim = Animation(x=100, y=100)
