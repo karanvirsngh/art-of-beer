@@ -13,6 +13,7 @@ from kivy.properties import NumericProperty, ObjectProperty
 from kivy.uix.widget import Widget
 from kivy.uix.button import Button
 from kivy.uix.label import Label
+from kivy.uix.image import Image
 from kivy.uix.scrollview import ScrollView
 from kivy.animation import Animation
 from kivy.adapters.listadapter import ListAdapter
@@ -64,17 +65,21 @@ Builder.load_string('''
             Color:
                 rgb: 1, 1, 1
             Rectangle:
-                source: 'images/main_background.jpg'
                 size: root.size
-        
-        Button:
-            color: (0, 0, 0, 1)
+        Image:
+            size_hint: .4, .3
+            pos_hint: {'x':0.3,'y':0.5}
+            allow_stretch: True
+            keep_ratio: False
+            source: 'images/main_logo.jpg'
+        Label:
+            text: 'Art of Beer'
             italic: True
-            text: 'Start Exporing Art of Beer'
+            color: [0,0,0,1]
             font_size: '20sp'
-            background_color: (1, 1, 1, .3)
-            color: (0, 0, 0, 1)
-            on_press: root.on_click()
+            pos_hint: {'x':0.35,'y':0.5}
+            size_hint: .3, .1
+
            
 <ProductScreen>:
     FloatLayout:
@@ -213,21 +218,22 @@ class ProductScreen(Screen):
 
         #Get all image file name in Images Craft Bottles
         craft_image_list = []
+
         for i in os.listdir('./images/Craft/bottles/'):
             craft_image_list.append(i)
         #First Horizontal Scrollable View
-        grid_one_layout = GridLayout(cols=30, spacing=10, size_hint_x=None)
+        grid_one_layout = GridLayout(cols=len(craft_image_list), spacing=10, size_hint_x=None)
         #Make sure the height is such that there is something to scroll.
         grid_one_layout.bind(minimum_width=grid_one_layout.setter('width'))
         for file_name in craft_image_list:
-            relative_one_layout = AnchorLayout(size_hint_x=None, size_hint_y=None, height=200, width=200)
-            btn = Button(size_hint_y=None, size_hint_x=None, height=200, width=200, background_color=[1,1,1,1], background_normal='images/Craft/bottles/{name}'.format(name=file_name))
-            label = Label(text=file_name, color=[0,0,0,1], size_hint=(None, None), height=30, width=relative_one_layout.width, halign='center', pos_hint={'x':0,'y':0})
-            relative_one_layout.add_widget(btn)
-            relative_one_layout.add_widget(label)
-            grid_one_layout.add_widget(relative_one_layout)
+            anchor_one_layout = AnchorLayout(size_hint_x=None, size_hint_y=None, height=240, width=200, anchor_x='center', anchor_y='bottom')
+            btn = Button(size_hint_y=None, size_hint_x=None, height=240, width=200, background_color=[1,1,1,1], background_normal='images/Craft/bottles/{name}'.format(name=file_name))
+            label = Label(text=file_name, color=[0,0,0,1], italic=True, font_size='10dp', size_hint=(None, None), height=30, width=anchor_one_layout.width, halign='center', pos_hint={'x':0,'y':0})
+            anchor_one_layout.add_widget(btn)
+            anchor_one_layout.add_widget(label)
+            grid_one_layout.add_widget(anchor_one_layout)
 
-        scroll_view_one = ScrollView(bar_color= [0,0,0,0], size_hint=(1.0, None), height=200, pos_hint={'x':0.0,'y':0.5})
+        scroll_view_one = ScrollView(bar_color= [0,0,0,0], size_hint=(1.0, None), height=240, pos_hint={'x':0.0,'y':0.5})
         scroll_view_one.do_scroll_y=False
         scroll_view_one.do_scroll_x=True
         scroll_view_one.add_widget(grid_one_layout)
@@ -238,18 +244,18 @@ class ProductScreen(Screen):
         for i in os.listdir('./images/Domestic/bottles/'):
             domestic_image_list.append(i)
         #First Horizontal Scrollable View
-        grid_two_layout = GridLayout(cols=30, spacing=10, size_hint_x=None)
+        grid_two_layout = GridLayout(cols=len(domestic_image_list), spacing=10, size_hint_x=None)
         #Make sure the height is such that there is something to scroll.
         grid_two_layout.bind(minimum_width=grid_two_layout.setter('width'))
         for file_name in domestic_image_list:
-            relative_two_layout = AnchorLayout(size_hint_x=None, size_hint_y=None, height=200, width=200)
-            btn = Button(size_hint_y=None, size_hint_x=None, height=200, width=200, background_color=[1,1,1,1], background_normal='images/Domestic/bottles/{name}'.format(name=file_name))
-            label = Label(text=file_name, color=[0,0,0,1], size_hint=(None, None), height=30, width=relative_two_layout.width, halign='center', pos_hint={'x':0,'y':0})
-            relative_two_layout.add_widget(btn)
-            relative_two_layout.add_widget(label)
-            grid_two_layout.add_widget(relative_two_layout)
+            anchor_two_layout = AnchorLayout(size_hint_x=None, size_hint_y=None, height=240, width=200, anchor_x='center', anchor_y='bottom')
+            btn = Button(size_hint_y=None, size_hint_x=None, height=240, width=200, background_color=[1,1,1,1], background_normal='images/Domestic/bottles/{name}'.format(name=file_name))
+            label = Label(text=file_name, color=[0,0,0,1], italic=True, font_size='10dp', size_hint=(None, None), height=30, width=anchor_two_layout.width, halign='center', pos_hint={'x':0,'y':0})
+            anchor_two_layout.add_widget(btn)
+            anchor_two_layout.add_widget(label)
+            grid_two_layout.add_widget(anchor_two_layout)
 
-        scroll_view_two = ScrollView(bar_color= [0,0,0,0], size_hint=(1.0, None), height=200, pos_hint={'x':0.0,'y':0.1})
+        scroll_view_two = ScrollView(bar_color= [0,0,0,0], size_hint=(1.0, None), height=240, pos_hint={'x':0.0,'y':0.1})
         scroll_view_two.do_scroll_y=False
         scroll_view_two.do_scroll_x=True
         scroll_view_two.add_widget(grid_two_layout)
@@ -286,10 +292,10 @@ class ProductFilterScreen(Screen):
     query_dict = {'light':0, 'dark':0, 'bottle':0, 'can':0, 'craft':0, 'domestic':0, 
                 'import':0, 'specialty':0, 'sport':0, 'dining':0, 'party':0, 'club':0}
     #Stacklayout for each selection screen            
-    stack_layout_one = StackLayout(orientation='lr-tb', spacing=0, size_hint=(1.0,0.9))
-    stack_layout_two = StackLayout(orientation='lr-tb', spacing=0, size_hint=(1.0,0.9), pos=(1200, 0))
-    stack_layout_three = StackLayout(orientation='lr-tb', spacing=0, size_hint=(1.0,0.9), pos=(1200, 0))
-    stack_layout_four = StackLayout(orientation='lr-tb', spacing=0, size_hint=(1.0,0.9), pos=(1200, 0))
+    stack_layout_one = StackLayout(orientation='lr-tb', spacing=0, size_hint=(1.0,0.8))
+    stack_layout_two = StackLayout(orientation='lr-tb', spacing=0, size_hint=(1.0,0.8), pos=(1200, 0))
+    stack_layout_three = StackLayout(orientation='lr-tb', spacing=0, size_hint=(1.0,0.8), pos=(1200, 0))
+    stack_layout_four = StackLayout(orientation='lr-tb', spacing=0, size_hint=(1.0,0.8), pos=(1200, 0))
     # Light/Dark Beer Button
     lightbeer_button = Button(text='Light Beer', size_hint=(.333,.3), background_normal='images/filter_item_background.jpg')
     darkbeer_button = Button(text='Dark Beer', size_hint=(.333,.3), background_normal='images/filter_item_background.jpg')
@@ -420,8 +426,6 @@ class ProductFilterScreen(Screen):
         self.clubbeer_button.bind(on_press=self.stack_four_item_select)
         self.skip_four_button.bind(on_press=self.stack_four_item_select)
 
-
-
         # First Stack View
         self.stack_layout_one.add_widget(self.lightbeer_button)
         self.stack_layout_one.add_widget(self.darkbeer_button)
@@ -457,9 +461,36 @@ class ProductFilterScreen(Screen):
         sm.current = 'Product_Screen'
 
 class MainScreen(Screen):
-    def on_click(self):
+    float_layout = AnchorLayout(size_hint=(1.0, 0.4), pos=(0,0))
+    image = Image(size_hint=(1.0, 1.0), source='images/main_background.jpg', allow_stretch=True, keep_ratio=False)
+    box_layout = BoxLayout(size_hint=(1.0, 1.0), orientation='vertical', pos=(0,0), spacing=5, padding=[0,10])
+    anchor_one_layout = AnchorLayout(size_hint=(1.0,0.3), anchor_x='center', anchor_y='center')
+    anchor_two_layout = AnchorLayout(size_hint=(1.0,0.3), anchor_x='center', anchor_y='center')
+    button_one = Button(size_hint=(0.3,1.0), text='Find your Matching', italic=True, font_size='20sp', background_color=(1,1,1,1))
+    button_two = Button(size_hint=(0.3,1.0), text='Product Catalog', italic=True, font_size='20sp', background_color=(1,1,1,1))
+    def __init__(self, **kwargs):
+        super(MainScreen, self).__init__(**kwargs)
+        self.button_one.bind(on_press=self.on_click_filter)
+        self.button_two.bind(on_press=self.on_click_product_catalog)
+        self.anchor_one_layout.add_widget(self.button_one)
+        self.anchor_two_layout.add_widget(self.button_two)
+        self.box_layout.add_widget(self.anchor_one_layout)
+        self.box_layout.add_widget(self.anchor_two_layout)
+        self.float_layout.add_widget(self.image)
+        self.float_layout.add_widget(self.box_layout)
+        self.add_widget(self.float_layout)
+
+    def on_click_filter(self, btn):
+        anim = Animation(x=0, y=-700, duration=1.0)
+        anim.bind(on_complete=self.animation_complete)
+        anim.start(self.float_layout)
         sm.transition = WipeTransition(direction='right')
         sm.current = 'Product_Filter_Screen'
+    def on_click_product_catalog(self, btn):
+        sm.transition = SlideTransition(direction='left')
+        sm.current = 'Product_Screen'
+    def animation_complete(self, animation, widget):
+        widget.pos=(0,0)
 
 # Create the screen manager
 sm = ScreenManager()
