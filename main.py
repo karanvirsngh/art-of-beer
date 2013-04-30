@@ -2,6 +2,8 @@ import kivy
 import os
 import time
 import re
+import sys
+import sqlite3
 
 kivy.require('1.0.9')
 from kivy.lang import Builder
@@ -43,7 +45,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition, SwapT
 #    karanvir=Name[1]
 
 #sm.add_widget(ProductDetailScreen(name='Product_Detail_Screen'))
-#sm.add_widget(ProductFilterScreen(name='Product_Filter_Screen'))
+    #sm.add_widget(ProductFilterScreen(name='Product_Filter_Screen'))
 #sm.current = 'Main_Screen'
 # Create the manager
 #sm = ScreenManager()
@@ -58,6 +60,34 @@ from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition, SwapT
 # Let's display the screen named 'Title 2'
 # The transition will be automatically used.
 #sm.current = 'Title 2'
+
+#Sqllite
+conn = sqlite3.connect("aob.db") # or use :memory: to put it in RAM
+cursor = conn.cursor()
+
+
+if(sys.argv[1]=="create"):
+    #create a table
+    cursor.execute("""CREATE TABLE beers
+                     (name text, des text,\
+                     dark boolean, light boolean,\
+                     can boolean, bottle boolean, keg boolean,\
+                     craft boolean, domestic boolean, import boolean, specialty boolean,\
+                     sports boolean, dining boolean, beach boolean,\
+                     party boolean, club boolean,\
+                     tags text)\
+                    """)
+    # insert some data
+    cursor.execute("INSERT INTO beers VALUES\
+                 ('sharps', 'fosters-txt',\
+                    '1','0','0','1','0','0','0','0','1','0','0','1','1','0','tag1')")
+    cursor.execute("INSERT INTO beers VALUES\
+                 ('fosters', 'foster-txt',\
+                    '0','1','0','1','0','0','0','0','1','1','0','1','1','0','tag2')")
+
+    # save data to database
+    conn.commit()
+
 Builder.load_string('''
 #:kivy 1.0.9
 <MainScreen>:
@@ -448,9 +478,13 @@ class ProductFilterScreen(Screen):
         self.stack_layout_four.pos=(1200,0)
         for i in self.query_dict:
             print i + str(self.query_dict[i])
+        resultt= self.query_dict['bottle']
+        print resultt
         #PERFORM SQL QUERY HERE
 
-
+        cursor.execute('SELECT name FROM beers where bottle=%d'%(resultt))
+        allentries=cursor.fetchall()
+        print allentries
         #---------------------------------------------------
         #RESET QUERY DIRECTIONARY
         for k in self.query_dict.keys():
