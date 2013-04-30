@@ -305,17 +305,45 @@ class ProductDetailScreen(Screen):
     def __init__(self, **kwargs):
         super(ProductDetailScreen, self).__init__(**kwargs)
         # File name of the beer selected
+        # NEEDS TO BE SET
         bottle_name = ('Coors_Lightbottle.jpg')
         # Beer name from the given bottle name
         beer_name = re.sub('[^a-zA-Z0-9\n]', ' ', bottle_name)
         beer_name = beer_name[:-10]
         # Beer text description pulled from the given beer_name
+        # NEEDS TO BE SET
         beer_description = ('This is a description of the best beer in the world')
         # Button definitions of visual wigets
         logoButton = Button(size=(200, 70), size_hint=(None, None), pos_hint={'x':0.0,'y':0.88}, background_color=[1,1,1,1], background_normal='images/main_logo.jpg')
         nameButton = Button(text='{name}'.format(name=beer_name), font_size=(30), color=[255,0,0,1], pos_hint={'x':0.25,'y':0.878}, size_hint=(.5,.12), background_color=[.3,.3,.3,1.0])
         bottleButton = Button(size=(200, 283), size_hint=(None, None), pos_hint={'x':0.0,'y':0.355}, background_color=[1,1,1,1], background_normal='images/Domestic/bottles/{name}'.format(name=bottle_name))
         descriptionButton = Button(text='{desc}'.format(desc=beer_description), pos_hint={'x':0.25,'y':0.355}, size_hint=(.5,.475), background_color=[.3,.3,.3,1.0])
+        # Get all the tags for the given beer
+        # NEEDS TO BE SET
+        beer_tags = 'sports football stadium party coors molson light beer mountains'
+        tag_list = []
+        for i in beer_tags.split():
+            tag_list.append(i)
+        # Horizontal Scrollable View
+        grid_one_layout = GridLayout(cols=30, spacing=5, size_hint_x=None)
+        # Make sure the height is such that there is something to scroll.
+        grid_one_layout.bind(minimum_width=grid_one_layout.setter('width'))
+        for tag_name in tag_list:
+            relative_one_layout = AnchorLayout(size_hint_x=None, size_hint_y=None, height=30, width=100)
+            btn = Button(size_hint_y=None, size_hint_x=None, height=30, width=100, background_color=[1,1,1,1], background_normal='images/filter_item_background.jpg')
+            label = Label(text=tag_name, color=[0,0,0,1], size_hint=(None, None), height=30, width=relative_one_layout.width, halign='center', pos_hint={'x':0,'y':0})
+            relative_one_layout.add_widget(btn)
+            relative_one_layout.add_widget(label)
+            grid_one_layout.add_widget(relative_one_layout)
+
+        scroll_view_one = ScrollView(bar_color= [0,0,0,0], size_hint=(1.0, None), height=30, pos_hint={'x':0.0,'y':0.25})
+        scroll_view_one.do_scroll_y=False
+        scroll_view_one.do_scroll_x=True
+        scroll_view_one.add_widget(grid_one_layout)
+        self.add_widget(scroll_view_one)
+
+
+        # Add wigets to the product detail page
         self.add_widget(logoButton)
         self.add_widget(bottleButton)
         self.add_widget(nameButton)
