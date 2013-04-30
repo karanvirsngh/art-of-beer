@@ -68,25 +68,6 @@ Builder.load_string('''
                 rgb: 1, 1, 1
             Rectangle:
                 size: root.size
-        Image:
-            size_hint: .4, .3
-            pos_hint: {'x':0.3,'y':0.5}
-            allow_stretch: True
-            keep_ratio: False
-            source: 'images/main_logo.jpg'
-        Label:
-            text: 'Art of Beer'
-            italic: True
-            color: [0,0,0,1]
-            font_size: '20sp'
-<<<<<<< HEAD
-            pos_hint: {'x':0.35,'y':0.5}
-            size_hint: .3, .1
-
-=======
-            background_color: (1, 1, 1, .3)
-            color: (0, 0, 0, 1)
-            on_press: root.on_click()
         RelativeLayout:
             size_x: root.width
             size_y: root.height
@@ -95,7 +76,6 @@ Builder.load_string('''
                 keep_ratio: False
                 size: root.width, root.height
                 source: 'images/SplashScreen.jpg'
->>>>>>> 0d3c1388fe3245d4db13442dd3d9f359542e2370
            
 <ProductScreen>:
     FloatLayout:
@@ -309,6 +289,7 @@ class ProductScreen(Screen):
         sm.current = 'Product_Filter_Screen'
         #sm.transition = SlideTransition(direction="up")
     def click_product_detail_screen(self):
+
         sm.transition = FadeTransition()
         sm.current = 'Product_Detail_Screen'
 
@@ -405,13 +386,13 @@ class ProductFilterScreen(Screen):
     skip_four_button = Button(text='Skip', size_hint=(.333,.3), background_color=[.3,.3,.3,1.0])
 
     def stack_animation_complete(self, animation, widget):
-        self.remove_widget(widget)
+        widget.pos=(0, 0)
 
     def stack_one_item_select(self, btn):
         # Check What's Selected
-        if btn.getter('text') == 'Light Beer':
+        if btn.text == 'Light Beer':
             self.query_dict['light'] = 1
-        elif btn.getter('text') == 'Dark Beer':
+        elif btn.text == 'Dark Beer':
             self.query_dict['dark'] = 1
         out_anim = Animation(x=-700, y=0, t='in_out_back', duration=1.0)
         out_anim.bind(on_complete=self.stack_animation_complete)
@@ -422,9 +403,9 @@ class ProductFilterScreen(Screen):
 
     def stack_two_item_select(self, btn):
         # Check What's Selected
-        if btn.getter('text') == 'Bottle Beer':
+        if btn.text == 'Bottle Beer':
             self.query_dict['bottle'] = 1
-        elif btn.getter('text') == 'Canned Beer':
+        elif btn.text == 'Canned Beer':
             self.query_dict['can'] = 1
         out_anim = Animation(x=-700, y=0, t='in_out_back', duration=1.0)
         out_anim.bind(on_complete=self.stack_animation_complete)
@@ -435,13 +416,13 @@ class ProductFilterScreen(Screen):
 
     def stack_three_item_select(self, btn):
         # Check What's Selected
-        if btn.getter('text') == 'Craft Beer':
+        if btn.text == 'Craft Beer':
             self.query_dict['craft'] = 1
-        elif btn.getter('text') == 'Domestic Beer':
+        elif btn.text == 'Domestic Beer':
             self.query_dict['domestic'] = 1
-        elif btn.getter('text') == 'Import Beer':
+        elif btn.text == 'Import Beer':
             self.query_dict['import'] = 1
-        elif btn.getter('text') == 'Specialty Beer':
+        elif btn.text == 'Specialty Beer':
             self.query_dict['specialty'] = 1
         out_anim = Animation(x=-700, y=0, t='in_out_back', duration=1.0)
         out_anim.bind(on_complete=self.stack_animation_complete)
@@ -451,20 +432,22 @@ class ProductFilterScreen(Screen):
         in_anim.start(self.stack_layout_four)
 
     def stack_four_item_select(self, btn):
-        if btn.getter('text') == 'Sports':
+        if btn.text == 'Sports':
             self.query_dict['sport'] = 1
-        elif btn.getter('text') == 'Dining':
+        elif btn.text == 'Dining':
             self.query_dict['dining'] = 1
-        elif btn.getter('text') == 'Party':
+        elif btn.text == 'Party':
             self.query_dict['party'] = 1
-        elif btn.getter('text') == 'Club':
+        elif btn.text == 'Club':
             self.query_dict['club'] = 1
-        self.remove_widget(self.stack_layout_four)
+        
         # Reset stack layout positions
         self.stack_layout_one.pos=(0,0)
         self.stack_layout_two.pos=(1200,0)
         self.stack_layout_three.pos=(1200,0)
         self.stack_layout_four.pos=(1200,0)
+        for i in self.query_dict:
+            print i + str(self.query_dict[i])
         #PERFORM SQL QUERY HERE
 
 
@@ -476,10 +459,10 @@ class ProductFilterScreen(Screen):
         sm.transition = SlideTransition(direction='left')
         sm.current = 'Product_Screen'
         # Re-add all the widgets
-        self.add_widget(self.stack_layout_one)
-        self.add_widget(self.stack_layout_two)
-        self.add_widget(self.stack_layout_three)
-        self.add_widget(self.stack_layout_four)
+        # self.add_widget(self.stack_layout_one)
+        # self.add_widget(self.stack_layout_two)
+        # self.add_widget(self.stack_layout_three)
+        # self.add_widget(self.stack_layout_four)
 
         #out_anim = Animation(x=-700, y=0, t='in_out_back', duration=1.2)
         #out_anim.bind(on_complete=self.stack_animation_complete)
