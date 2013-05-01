@@ -422,7 +422,7 @@ class ProductScreen(Screen):
         #layout_two
     def on_item_click(self, btn):
         beer_name = btn.text
-        beer_description = 'TESTING'
+        beer_description = 'aroma hops, brewing cold filter sparge. hefe, hydrometer cask lauter aroma hops bottom fermenting yeast, pitching wheat beer glass. specific gravity hop back trappist, " bunghole abbey aroma hops lager, brew oxidized crystal malt keg." finishing hops, fermentation brewhouse crystal malt. conditioning tank; aau, ipa barley rims lagering-- hydrometer sparge sparge. cask conditioning dry stout trappist bitter. bacterial shelf life units of bitterness hop back dextrin sparge imperial adjunct. hydrometer conditioning tank filter lager lambic, " barley," lager gravity."'
         print beer_name
         sm.transition = SlideTransition(direction='left')
         sm.current = 'Product_Detail_Screen'
@@ -445,22 +445,24 @@ class ProductScreen(Screen):
         sm.transition = FadeTransition()
         sm.current = 'Product_Detail_Screen'
 
-    def update_list(self):
+    def update_list(self, query):
         # Perform List Updates
-        pass
+        self.query_result = query
         #self.remove_widget(self.scroll_view_one)
         #self.remove_widget(self.scroll_view_two)
 
 class ProductDetailScreen(Screen):
     beer_description = 'This is a description of the best beer in the world'
-    logoImage = Image(size=(200, 70), size_hint=(None, None), pos_hint={'x':0.1,'y':0.72}, source='images/main_logo.jpg', allow_stretch=True, keep_ratio=True)
+    logoImage = Image(size_hint=(0.15,0.15), pos_hint={'x':0.05,'y':0.6}, source='images/main_logo.jpg', allow_stretch=True, keep_ratio=True)
     nameLabel = Label(text='{name}'.format(name='Beer Name'), font_size=(30), color=[1,0,0,1], pos_hint={'x':0.25,'y':0.878}, size_hint=(.5,.12))
     bottleImage_layout = AnchorLayout(anchor_x='center', anchor_y='center', size_hint=(0.5,0.85), pos=(0.0,0.0))
     bottleImage = Image(size=(300, 425), size_hint=(None, None), source='images/bottles/{name}'.format(name='Aguila.jpg'), allow_stretch=True, keep_ratio=True)
-    nameLabel_two = Label(font_size='30sp', color=[0,0,0,1], size_hint=(1.0, 0.2))
-    locationLabel = Label(font_size='30sp', color=[0,0,0,1], size_hint=(1.0, 0.2))
-    descriptionLabel = Label(text='{desc}'.format(desc=beer_description), size_hint=(1.0,0.6), background_color=[.3,.3,.3,1.0])
-    description_layout = BoxLayout(orietation='vertical', size_hint=(.5,.85), pos_hint={'x':0.5,'y':0.0})
+    nameLabel_two = Image(font_size='30sp', color=[0,0,0,1], size_hint=(1.0, 0.1))
+    locationLabel = Image(text='Location: Unknown', font_size='30sp', color=[0,0,0,1], size_hint=(1.0, 0.1))
+    priceLabel = Image(text='$$', font_size='30sp', color=[0,0,0,1], size_hint=(1.0,0.1))
+    descriptionAnchor = BoxLayout(orientation='vertical', anchor_y='top', anchor_x='left', size_hint=(1.0,0.6))
+    descriptionLabel = Label(text='{desc}'.format(desc=beer_description), font_size='12sp', size_hint=(1.0,1.0), text_size=(700, 500), halign='left', valign='top', color=[0,0,0,1])
+    info_layout = RelativeLayout(orietation='vertical', size_hint=(0.5,.85), pos_hint={'x':0.5,'y':0.0})
     def __init__(self, **kwargs):
         super(ProductDetailScreen, self).__init__(**kwargs)
         # File name of the beer selected
@@ -471,9 +473,12 @@ class ProductDetailScreen(Screen):
         #beer_name = beer_name[:-4]
         # Beer text description pulled cfrom the given beer_name
         # NEEDS TO BE SET
-        self.description_layout.add_widget(self.nameLabel_two)
-        self.description_layout.add_widget(self.locationLabel)
-        self.description_layout.add_widget(self.descriptionLabel)
+        self.descriptionAnchor.add_widget(self.descriptionLabel)
+        self.info_layout.add_widget(self.nameLabel_two)
+        self.info_layout.add_widget(self.locationLabel)
+        self.info_layout.add_widget(self.priceLabel)
+
+        self.info_layout.add_widget(self.descriptionAnchor)
         self.bottleImage_layout.add_widget(self.bottleImage)
         # Get all the tags for the given beer
         # NEEDS TO BE SET
@@ -504,7 +509,7 @@ class ProductDetailScreen(Screen):
         self.add_widget(self.logoImage)
         self.add_widget(self.bottleImage_layout)
         self.add_widget(self.nameLabel)
-        self.add_widget(self.description_layout)
+        self.add_widget(self.info_layout)
 
     def animate(self):
         anim = Animation(x=100, y=100)
@@ -527,7 +532,7 @@ class ProductDetailScreen(Screen):
 
 class ProductFilterScreen(Screen):
     # Dictionary that contains all the fields. 1 represents selected, 0 is not selected.
-    query_dict = {'light':0, 'dark':0, 'bottle':0, 'can':0, 'craft':0, 'domestic':0, 'import':0, 'specialty':0, 'sport':0, 'dining':0, 'party':0, 'club':0}
+    query_dict = {'light':0, 'dark':0, 'bottle':0, 'can':0, 'craft':0, 'domestic':0, 'import':0, 'specialty':0, 'sports':0, 'dining':0, 'party':0, 'club':0}
     #Stacklayout for each selection screen            
     box_layout_one = BoxLayout(size_hint=(1.0, 0.2), pos=(0, 300), spacing=2)
     box_layout_two = BoxLayout(size_hint=(1.0, 0.2), pos=(1300, 300), spacing=2)
@@ -606,7 +611,7 @@ class ProductFilterScreen(Screen):
 
     def stack_four_item_select(self, btn):
         if btn.text == 'Sports':
-            self.query_dict['sport'] = 1
+            self.query_dict['sports'] = 1
         elif btn.text == 'Dining':
             self.query_dict['dining'] = 1
         elif btn.text == 'Party':
@@ -639,10 +644,11 @@ class ProductFilterScreen(Screen):
 
         #PERFORM SQL QUERY HERE
         #todo: include the case where all filters were skipped
-        cursor.execute('SELECT name FROM beers where %s'%(search_p))
+        cursor.execute('SELECT name FROM beers where %s ORDER BY name'%(search_p))
         allentries=cursor.fetchall()
-        print allentries
-
+        #print allentries
+        result = [str(entry[0]) for entry in allentries]
+        print result
         #---------------------------------------------------
         #RESET QUERY DIRECTIONARY
         for k in self.query_dict.keys():
@@ -651,7 +657,7 @@ class ProductFilterScreen(Screen):
         sm.transition = SlideTransition(direction='left')
         sm.current = 'Product_Screen'
         product_list_screen = sm.get_screen('Product_Screen')
-        product_list_screen.update_list()
+        product_list_screen.update_list(result)
 
         #out_anim = Animation(x=-700, y=0, t='in_out_back', duration=1.2)
         #out_anim.bind(on_complete=self.stack_animation_complete)
