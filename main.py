@@ -427,8 +427,12 @@ class ProductScreen(Screen):
         sm.transition = SlideTransition(direction='left')
         sm.current = 'Product_Detail_Screen'
         # PERFORM SECOND QUERY HERE to narrow to one item
-
-        # Call product detail class's populate function
+        name = beer_name[:-4]
+        print name
+        cursor.execute("SELECT * FROM beers WHERE name = '%s'"%(name))
+        result = cursor.fetchall()
+        print result
+        # resul product detail class's populate function
         product_detail_instance = sm.get_screen('Product_Detail_Screen')
         product_detail_instance.show_item(beer_name, beer_description)
 
@@ -641,8 +645,8 @@ class ProductFilterScreen(Screen):
 
         #---------------------------------------------------
         #RESET QUERY DIRECTIONARY
-        #for k in self.query_dict.keys():
-        #    self.query_dict[k] = 0
+        for k in self.query_dict.keys():
+            self.query_dict[k] = 0
         #Animate Screen Transition
         sm.transition = SlideTransition(direction='left')
         sm.current = 'Product_Screen'
