@@ -325,7 +325,7 @@ class ProductScreen(Screen):
         for file_name in domestic_image_list:
             anchor_two_layout = AnchorLayout(size_hint_x=None, size_hint_y=None, height=240, width=200, anchor_x='center', anchor_y='bottom')
             btn = Button(size_hint_y=None, size_hint_x=None, height=240, width=200, background_color=[1,1,1,1], background_normal='images/Domestic/bottles/{f_name}'.format(f_name=file_name))
-            #btn.bind(on_press())
+            btn.bind(on_press=self.on_item_click)
             label = Label(text=file_name, color=[0,0,0,1], italic=True, font_size='10dp', size_hint=(None, None), height=30, width=anchor_two_layout.width, halign='center', pos_hint={'x':0,'y':0})
             anchor_two_layout.add_widget(btn)
             anchor_two_layout.add_widget(label)
@@ -338,7 +338,11 @@ class ProductScreen(Screen):
         #Second Horizontal Scrollable View
         #layout_two
     def on_item_click(self, btn):
-        pass
+        beer_name = btn.text
+        sm.transition = SlideTransition(direction='left')
+        sm.current = 'Product_Detail_Screen'
+        product_detail_instance = sm.get_screen('Product_Detail_Screen')
+        product_detail_instance.show_item(beer_name)
 
     def on_click(self):
         sm.transition = SlideTransition(direction='right')
@@ -355,8 +359,11 @@ class ProductScreen(Screen):
         #self.remove_widget(self.scroll_view_two)
 
 class ProductDetailScreen(Screen):
-
-    bottle_name = 'hi'
+    logoImage = Image(size=(200, 70), size_hint=(None, None), pos_hint={'x':0.12,'y':0.72}, source='images/main_logo.jpg', allow_stretch=True, keep_ratio=True)
+    nameLabel = Label(text='{name}'.format(name='Beer Name'), font_size=(30), color=[1,0,0,1], pos_hint={'x':0.25,'y':0.878}, size_hint=(.5,.12))
+    bottleImage = Image(size=(300, 425), size_hint=(None, None), pos=(100,150), source='images/bottles/{name}'.format(name=''), allow_stretch=True, keep_ratio=True)
+    descriptionLabel = Button(text='{desc}'.format(desc=beer_description), pos_hint={'x':0.5,'y':0.0}, size_hint=(1.0,1.0), background_color=[.3,.3,.3,1.0])
+    description_layout = BoxLayout(orietation='vertical', size_hint=(.5,.85), pos_hint={'x':0.5,'y':0.0}, background_color=[.3,.3,.3,1.0])
     def __init__(self, **kwargs):
         super(ProductDetailScreen, self).__init__(**kwargs)
         # File name of the beer selected
@@ -368,13 +375,7 @@ class ProductDetailScreen(Screen):
         # Beer text description pulled from the given beer_name
         # NEEDS TO BE SET
         beer_description = ('This is a description of the best beer in the world')
-        # Button definitions of visual wigets
-        logoImage = Image(size=(200, 70), size_hint=(None, None), pos_hint={'x':0.12,'y':0.72}, source='images/main_logo.jpg', allow_stretch=True, keep_ratio=True)
-        nameLabel = Label(text='{name}'.format(name=self.bottle_name), font_size=(30), color=[1,0,0,1], pos_hint={'x':0.25,'y':0.878}, size_hint=(.5,.12))
-        bottleImage = Image(size=(300, 425), size_hint=(None, None), pos=(100,150), source='images/Domestic/bottles/{name}'.format(name=self.bottle_name), allow_stretch=True, keep_ratio=True)
-        descriptionLabel = Button(text='{desc}'.format(desc=beer_description), pos_hint={'x':0.5,'y':0.0}, size_hint=(1.0,1.0), background_color=[.3,.3,.3,1.0])
-        description_layout = BoxLayout(orietation='vertical', size_hint=(.5,.85), pos_hint={'x':0.5,'y':0.0}, background_color=[.3,.3,.3,1.0])
-        description_layout.add_widget(descriptionLabel)
+        self.description_layout.add_widget(descriptionLabel)
         # Get all the tags for the given beer
         # NEEDS TO BE SET
         beer_tags = 'sports football stadium party coors molson light beer mountains'
@@ -419,8 +420,8 @@ class ProductDetailScreen(Screen):
             sm.transition = WipeTransition(direction='left')
             sm.current = 'Product_Screen'
 
-    def show_item(self, product, description):
-        pass
+    def show_item(self, product):
+        self.bottle_name = product
 
 class ProductFilterScreen(Screen):
     # Dictionary that contains all the fields. 1 represents selected, 0 is not selected.
