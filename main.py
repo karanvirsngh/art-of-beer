@@ -247,6 +247,7 @@ Builder.load_string('''
                 size: 250, 50
                 pos_hint: {'x':0.8, 'y':0.3}
                 on_press: root.click_product_detail_screen()
+                background_normal: 'images/chromeButtonUp.gif'
 
 [ProductItem@SelectableView+BoxLayout]:
     size_hint_y: ctx.size_hint_y
@@ -286,12 +287,14 @@ Builder.load_string('''
                 size: 250, 50
                 pos_hint: {'x':0.0, 'y':0.3}
                 on_press: root.click_product_screen()
+                background_normal: 'images/chromeButtonUp.gif'
             Button:
                 text: 'Main Menu'
                 size_hint: None, None
                 size: 250, 50
                 pos_hint: {'x':0.8, 'y':0.3}
                 on_press: root.click_main_screen()
+                background_normal: 'images/chromeButtonUp.gif'
 
 <ProductFilterScreen>:
     FloatLayout:
@@ -317,18 +320,21 @@ Builder.load_string('''
                 size: 250, 50
                 pos_hint: {'x':0.0, 'y':0.3}
                 on_press: root.click_main_screen()
+                background_normal: 'images/chromeButtonUp.gif'
             Button:
                 text: 'Product List Screen'
                 size_hint: None, None
                 size: 250, 50
                 pos_hint: {'x':0.8, 'y':0.3}
                 on_press: root.click_product_list_screen()
+                background_normal: 'images/chromeButtonUp.gif'
             Button:
                 text: 'Sample Detail Screen'
                 size_hint: None, None
                 size: 250, 50
                 pos_hint: {'x':1.6, 'y':0.3}
                 on_press: root.click_product_detail_screen()
+                background_normal: 'images/chromeButtonUp.gif'
         RelativeLayout:
             size_x: root.width
             size_hint_y: 0.15
@@ -835,8 +841,8 @@ class MainScreen(Screen):
     box_layout = BoxLayout(size_hint=(1.0, 1.0), orientation='vertical', pos=(0,0), spacing=5, padding=[0,10])
     anchor_one_layout = AnchorLayout(size_hint=(1.0,0.3), anchor_x='center', anchor_y='center')
     anchor_two_layout = AnchorLayout(size_hint=(1.0,0.3), anchor_x='center', anchor_y='center')
-    button_one = Button(size_hint=(0.3,1.0), text='Find your Matching', italic=True, font_size='20sp', background_color=(1,1,1,1))
-    button_two = Button(size_hint=(0.3,1.0), text='Product Catalog', italic=True, font_size='20sp', background_color=(1,1,1,1))
+    button_one = Button(size_hint=(0.3,1.0), text='Find your Matching', italic=True, font_size='20sp', background_color=(1,1,1,1), background_normal='images/chromeButtonUp.gif')
+    button_two = Button(size_hint=(0.3,1.0), text='Product Catalog', italic=True, font_size='20sp', background_color=(1,1,1,1), background_normal='images/chromeButtonUp.gif')
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
         self.button_one.bind(on_press=self.on_click_filter)
