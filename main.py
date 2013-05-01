@@ -373,6 +373,28 @@ class ProductScreen(Screen):
         #self.add_widget(list_view)
 
         #Get all image file name in Images Craft Bottles
+        first_list = []
+        second_list = []
+        if self.query_result is None:
+            i = 0
+            for name in os.listdir('./images/bottles/'):
+                if i%2 == 0:
+                    first_list.append(name)
+                else:
+                    second_list.append(name)
+                i = i + 1
+            #get all Items
+        else:
+            i = 0
+            for name in self.query_result:
+                if i%2 == 0:
+                    first_list.append(name)
+                else:
+                    second_list.append(name)
+                i = i + 1
+        print first_list
+        print second_list
+
         craft_image_list = []
 
         for i in os.listdir('./images/bottles/'):
@@ -450,18 +472,80 @@ class ProductScreen(Screen):
         self.query_result = query
         #self.remove_widget(self.scroll_view_one)
         #self.remove_widget(self.scroll_view_two)
+    def reset_list(self):
+        self.query_result = None
+
+    def set_list(self):
+        #Get all image file name in Images Craft Bottles
+        first_list = []
+        second_list = []
+        if self.query_result is None:
+            i = 0
+            for name in os.listdir('./images/bottles/'):
+                if i%2 == 0:
+                    first_list.append(name)
+                else:
+                    second_list.append(name)
+                i = i + 1
+            #get all Items
+        else:
+            i = 0
+            for name in self.query_result:
+                if i%2 == 0:
+                    first_list.append(name+'.jpg')
+                else:
+                    second_list.append(name+'.jpg')
+                i = i + 1
+        # Clear widget first
+        self.scroll_view_one.clear_widgets()
+        self.scroll_view_two.clear_widgets()
+        self.remove_widget(self.scroll_view_one)
+        self.remove_widget(self.scroll_view_two)
+        #First Horizontal Scrollable View
+        grid_one_layout = GridLayout(cols=len(first_list), spacing=10, size_hint_x=None)
+        #Make sure the height is such that there is something to scroll.
+        grid_one_layout.bind(minimum_width=grid_one_layout.setter('width'))
+        for file_name in first_list:
+            anchor_one_layout = AnchorLayout(size_hint_x=None, size_hint_y=None, height=240, width=200, anchor_x='center', anchor_y='bottom')
+            btn = Button(text=file_name, color=[0,0,0,0], size_hint_y=None, size_hint_x=None, height=240, width=200, background_color=[1,1,1,1], background_normal='images/bottles/{f_name}'.format(f_name=file_name))
+            btn.bind(on_press=self.on_item_click)
+            beer_name = file_name[:-4]
+            label = Label(text=beer_name, color=[0,0,0,1], italic=True, font_size='12dp', size_hint=(None, None), height=30, width=anchor_one_layout.width, halign='center', pos_hint={'x':0,'y':0})
+            anchor_one_layout.add_widget(btn)
+            anchor_one_layout.add_widget(label)
+            grid_one_layout.add_widget(anchor_one_layout)
+
+        self.scroll_view_one.add_widget(grid_one_layout)
+        self.add_widget(self.scroll_view_one)
+
+        #First Horizontal Scrollable View
+        grid_two_layout = GridLayout(cols=len(second_list), spacing=10, size_hint_x=None)
+        #Make sure the height is such that there is something to scroll.
+        grid_two_layout.bind(minimum_width=grid_two_layout.setter('width'))
+        for file_name in second_list:
+            anchor_two_layout = AnchorLayout(size_hint_x=None, size_hint_y=None, height=240, width=200, anchor_x='center', anchor_y='bottom')
+            btn = Button(text=file_name, color=[0,0,0,0], size_hint_y=None, size_hint_x=None, height=240, width=200, background_color=[1,1,1,1], background_normal='images/bottles/{f_name}'.format(f_name=file_name))
+            btn.bind(on_press=self.on_item_click)
+            beer_name = file_name[:-4]
+            label = Label(text=beer_name, color=[0,0,0,1], italic=True, font_size='12dp', size_hint=(None, None), height=30, width=anchor_two_layout.width, halign='center', pos_hint={'x':0,'y':0})
+            anchor_two_layout.add_widget(btn)
+            anchor_two_layout.add_widget(label)
+            grid_two_layout.add_widget(anchor_two_layout)
+
+        self.scroll_view_two.add_widget(grid_two_layout)
+        self.add_widget(self.scroll_view_two)
 
 class ProductDetailScreen(Screen):
     beer_description = 'This is a description of the best beer in the world'
-    logoImage = Image(size_hint=(0.15,0.15), pos_hint={'x':0.05,'y':0.6}, source='images/main_logo.jpg', allow_stretch=True, keep_ratio=True)
-    nameLabel = Label(text='{name}'.format(name='Beer Name'), font_size=(30), color=[1,0,0,1], pos_hint={'x':0.25,'y':0.878}, size_hint=(.5,.12))
+    logoImage = Image(size_hint=(0.15,0.15), pos_hint={'x':0.00,'y':0.7}, source='images/main_logo.jpg', allow_stretch=True, keep_ratio=True)
+    nameLabel = Label(text='{name}'.format(name='Beer Name'), italic=True, font_size=(30), color=[1,1,1,1], pos_hint={'x':0.25,'y':0.878}, size_hint=(.5,.12))
     bottleImage_layout = AnchorLayout(anchor_x='center', anchor_y='center', size_hint=(0.5,0.85), pos=(0.0,0.0))
     bottleImage = Image(size=(300, 425), size_hint=(None, None), source='images/bottles/{name}'.format(name='Aguila.jpg'), allow_stretch=True, keep_ratio=True)
-    nameLabel_two = Image(font_size='30sp', color=[0,0,0,1], size_hint=(1.0, 0.1))
-    locationLabel = Image(text='Location: Unknown', font_size='30sp', color=[0,0,0,1], size_hint=(1.0, 0.1))
-    priceLabel = Image(text='$$', font_size='30sp', color=[0,0,0,1], size_hint=(1.0,0.1))
-    descriptionAnchor = BoxLayout(orientation='vertical', anchor_y='top', anchor_x='left', size_hint=(1.0,0.6))
-    descriptionLabel = Label(text='{desc}'.format(desc=beer_description), font_size='12sp', size_hint=(1.0,1.0), text_size=(700, 500), halign='left', valign='top', color=[0,0,0,1])
+    nameLabel_two = Label(font_size='14sp', bold=True,color=[0,0,0,1], size_hint=(0.5, 0.1), pos_hint={'x':0.5,'y':0.65}, halign='left', text_size=(700, 30))
+    locationLabel = Label(text='Location: Unknown', font_size='12sp', color=[0,0,0,1], size_hint=(0.5, 0.1), pos_hint={'x':0.5,'y':0.6}, halign='left', text_size=(700, 30))
+    priceLabel = Label(text='$$', font_size='12sp', color=[0,0,0,1], size_hint=(0.5,0.1), pos_hint={'x':0.5,'y':0.55}, halign='left', text_size=(700, 30))
+    descriptionAnchor = BoxLayout(orientation='vertical', anchor_y='top', anchor_x='left', size_hint=(1.0,0.5))
+    descriptionLabel = Label(text='{desc}'.format(desc=beer_description), font_size='10sp', size_hint=(1.0,1.0), text_size=(700, 500), halign='left', valign='top', color=[0,0,0,1])
     info_layout = RelativeLayout(orietation='vertical', size_hint=(0.5,.85), pos_hint={'x':0.5,'y':0.0})
     def __init__(self, **kwargs):
         super(ProductDetailScreen, self).__init__(**kwargs)
@@ -474,9 +558,9 @@ class ProductDetailScreen(Screen):
         # Beer text description pulled cfrom the given beer_name
         # NEEDS TO BE SET
         self.descriptionAnchor.add_widget(self.descriptionLabel)
-        self.info_layout.add_widget(self.nameLabel_two)
-        self.info_layout.add_widget(self.locationLabel)
-        self.info_layout.add_widget(self.priceLabel)
+        # self.info_layout.add_widget(self.nameLabel_two)
+        # self.info_layout.add_widget(self.locationLabel)
+        # self.info_layout.add_widget(self.priceLabel)
 
         self.info_layout.add_widget(self.descriptionAnchor)
         self.bottleImage_layout.add_widget(self.bottleImage)
@@ -509,6 +593,10 @@ class ProductDetailScreen(Screen):
         self.add_widget(self.logoImage)
         self.add_widget(self.bottleImage_layout)
         self.add_widget(self.nameLabel)
+
+        self.add_widget(self.nameLabel_two)
+        self.add_widget(self.locationLabel)
+        self.add_widget(self.priceLabel)
         self.add_widget(self.info_layout)
 
     def animate(self):
@@ -519,6 +607,9 @@ class ProductDetailScreen(Screen):
     def click_main_screen(self):
         sm.transition = WipeTransition(direction='left')
         sm.current = 'Main_Screen'
+        # Reset list
+        product_screen = sm.get_screen('Product_Screen')
+        product_screen.reset_list()
 
     def click_product_screen(self):
             sm.transition = WipeTransition(direction='left')
@@ -529,6 +620,7 @@ class ProductDetailScreen(Screen):
         self.bottleImage.source = 'images/bottles/' + name
         self.logoImage.source = 'images/logos/' + name
         self.descriptionLabel.text = description
+        self.nameLabel_two.text = name[:-4]
 
 class ProductFilterScreen(Screen):
     # Dictionary that contains all the fields. 1 represents selected, 0 is not selected.
@@ -658,6 +750,7 @@ class ProductFilterScreen(Screen):
         sm.current = 'Product_Screen'
         product_list_screen = sm.get_screen('Product_Screen')
         product_list_screen.update_list(result)
+        product_list_screen.set_list()
 
         #out_anim = Animation(x=-700, y=0, t='in_out_back', duration=1.2)
         #out_anim.bind(on_complete=self.stack_animation_complete)
