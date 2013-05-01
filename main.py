@@ -79,7 +79,7 @@ if(len(sys.argv)>1):
         cursor.execute("INSERT INTO beers VALUES ('Miller Lite','Miller Lite','0','1','0','1','0','1','0','0','0','0','1','1')")
         cursor.execute("INSERT INTO beers VALUES ('Mils Best Light','Mils Best Light','0','1','0','1','0','1','0','0','0','0','0','0')")
         cursor.execute("INSERT INTO beers VALUES ('Mickeys','Mickeys','0','1','0','1','0','1','0','0','1','1','1','1')")
-        cursor.execute("INSERT INTO beers VALUES ('Red Do','Red Do','0','1','0','1','0','1','0','0','0','0','0','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Red Dog','Red Dog','0','1','0','1','0','1','0','0','0','0','0','0')")
         cursor.execute("INSERT INTO beers VALUES ('Coors Banquet','Coors Banquet','0','1','0','1','0','1','0','0','1','1','1','1')")
         cursor.execute("INSERT INTO beers VALUES ('Mils Best','Mils Best','0','1','0','1','0','1','0','0','0','0','0','1')")
         cursor.execute("INSERT INTO beers VALUES ('Killians Red','Killians Red','1','0','1','0','1','0','0','0','1','1','1','1')")
@@ -461,11 +461,15 @@ class ProductScreen(Screen):
     def on_click(self):
         sm.transition = SlideTransition(direction='right')
         sm.current = 'Product_Filter_Screen'
+        #Reset query list
+        self.reset_list()
         #sm.transition = SlideTransition(direction="up")
     def click_product_detail_screen(self):
 
         sm.transition = FadeTransition()
         sm.current = 'Product_Detail_Screen'
+        self.reset_list()
+        self.set_list()
 
     def update_list(self, query):
         # Perform List Updates
@@ -736,7 +740,7 @@ class ProductFilterScreen(Screen):
 
         #PERFORM SQL QUERY HERE
         #todo: include the case where all filters were skipped
-        cursor.execute('SELECT name FROM beers where %s ORDER BY name'%(search_p))
+        cursor.execute('SELECT name FROM beers where %s'%(search_p))
         allentries=cursor.fetchall()
         #print allentries
         result = [str(entry[0]) for entry in allentries]
@@ -817,6 +821,9 @@ class ProductFilterScreen(Screen):
     def click_product_list_screen(self):
         sm.transition = WipeTransition(direction='right')
         sm.current = 'Product_Screen'
+        screen = sm.get_screen('Product_Screen')
+        screen.reset_list()
+        screen.set_list()
 
     def click_product_detail_screen(self):
         sm.transition = WipeTransition(direction='right')
