@@ -303,7 +303,7 @@ class ProductScreen(Screen):
         grid_one_layout.bind(minimum_width=grid_one_layout.setter('width'))
         for file_name in craft_image_list:
             anchor_one_layout = AnchorLayout(size_hint_x=None, size_hint_y=None, height=240, width=200, anchor_x='center', anchor_y='bottom')
-            btn = Button(size_hint_y=None, size_hint_x=None, height=240, width=200, background_color=[1,1,1,1], background_normal='images/Craft/bottles/{f_name}'.format(f_name=file_name))
+            btn = Button(size_hint_y=None, size_hint_x=None, height=240, width=200, background_color=[1,1,1,1], background_normal='images/bottles/{f_name}'.format(f_name=file_name))
             label = Label(text=file_name, color=[0,0,0,1], italic=True, font_size='10dp', size_hint=(None, None), height=30, width=anchor_one_layout.width, halign='center', pos_hint={'x':0,'y':0})
             anchor_one_layout.add_widget(btn)
             anchor_one_layout.add_widget(label)
@@ -324,7 +324,7 @@ class ProductScreen(Screen):
         grid_two_layout.bind(minimum_width=grid_two_layout.setter('width'))
         for file_name in domestic_image_list:
             anchor_two_layout = AnchorLayout(size_hint_x=None, size_hint_y=None, height=240, width=200, anchor_x='center', anchor_y='bottom')
-            btn = Button(size_hint_y=None, size_hint_x=None, height=240, width=200, background_color=[1,1,1,1], background_normal='images/Domestic/bottles/{f_name}'.format(f_name=file_name))
+            btn = Button(size_hint_y=None, size_hint_x=None, height=240, width=200, background_color=[1,1,1,1], background_normal='images/bottles/{f_name}'.format(f_name=file_name))
             btn.bind(on_press=self.on_item_click)
             label = Label(text=file_name, color=[0,0,0,1], italic=True, font_size='10dp', size_hint=(None, None), height=30, width=anchor_two_layout.width, halign='center', pos_hint={'x':0,'y':0})
             anchor_two_layout.add_widget(btn)
