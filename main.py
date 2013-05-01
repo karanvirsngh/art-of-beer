@@ -26,7 +26,96 @@ from kivy.uix.listview import ListItemButton, ListView, SelectableView
 from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition, SwapTransition, WipeTransition, FadeTransition, SlideTransition
 
+conn = sqlite3.connect("aob.db") # or use :memory: to put it in RAM
+ 
+cursor = conn.cursor()
 
+if(len(sys.argv)>1):
+    if(sys.argv[1]=="create"):
+        #create a table
+        cursor.execute("""CREATE TABLE beers
+                         (name text, des text,\
+                         dark boolean, light boolean,\
+                         can boolean, bottle boolean,\
+                         craft boolean, domestic boolean, import boolean, specialty boolean,\
+                         sports boolean, dining boolean, party boolean, club boolean)\
+                        """)
+        # insert some data
+        cursor.execute("INSERT INTO beers VALUES ('Molson Canadian Light','Molson Canadian Light','1','0','1','0','0','0','0','1','1','1','1','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Molson Ice','Molson Ice','0','1','0','1','0','0','0','1','0','1','1','1')")
+        cursor.execute("INSERT INTO beers VALUES ('Sparks Lemonade','Sparks Lemonade','1','0','1','0','0','0','0','1','1','0','1','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Redds Apple Ale','Redds Apple Ale','1','0','1','0','0','0','0','1','1','1','0','1')")
+        cursor.execute("INSERT INTO beers VALUES ('Sparks','Sparks','0','1','0','1','0','0','0','1','0','1','1','1')")
+        cursor.execute("INSERT INTO beers VALUES ('Third Shift','Third Shift','1','0','0','1','0','0','0','1','1','0','0','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Sparks Iced Tea','Sparks Iced Tea','1','0','0','1','0','0','0','1','1','1','1','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Fosters Ale','Fosters Ale','0','1','0','1','0','0','0','1','0','0','0','1')")
+        cursor.execute("INSERT INTO beers VALUES ('Sharps','Sharps','0','1','1','0','0','0','0','1','0','1','1','1')")
+        cursor.execute("INSERT INTO beers VALUES ('Sparks Blackberry','Sparks Blackberry','0','1','1','0','0','0','0','1','1','1','0','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Molson Canadian','Molson Canadian','0','1','0','1','0','0','0','1','1','0','1','1')")
+        cursor.execute("INSERT INTO beers VALUES ('Molson Golden','Molson Golden','0','1','0','1','0','0','0','1','0','0','0','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Molson XXX','Molson XXX','1','0','0','1','0','0','0','1','0','1','1','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Fosters','Fosters','0','1','0','1','0','0','0','1','1','1','1','1')")
+        cursor.execute("INSERT INTO beers VALUES ('Coors NA','Coors NA','1','0','0','1','0','0','0','1','1','0','1','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Keystone','Keystone','0','1','1','0','0','1','0','0','0','1','0','1')")
+        cursor.execute("INSERT INTO beers VALUES ('Steel Reserve','Steel Reserve','0','1','1','0','0','1','0','0','1','0','1','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Icehouse','Icehouse','0','1','0','1','0','1','0','0','0','0','0','1')")
+        cursor.execute("INSERT INTO beers VALUES ('Miller Chill','Miller Chill','0','1','1','0','0','1','0','0','1','1','1','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Hamms','Hamms','0','1','1','0','0','1','0','0','0','0','0','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Miller 64','Miller 64','1','0','1','0','0','1','0','0','1','1','1','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Mickeys Ice','Mickeys Ice','1','0','0','1','0','1','0','0','0','0','1','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Keystone Ice','Keystone Ice','0','1','1','0','0','1','0','0','1','1','0','1')")
+        cursor.execute("INSERT INTO beers VALUES ('Keystone Light','Keystone Light','1','0','1','0','0','1','0','0','0','0','1','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Miller High Life Light','Miller High Life Light','0','1','0','1','0','1','0','0','0','0','0','1')")
+        cursor.execute("INSERT INTO beers VALUES ('MGD','MGD','0','1','1','0','0','1','0','0','1','0','1','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Steel Reserve Six','Steel Reserve Six','0','1','1','0','0','1','0','0','0','0','0','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Miller High Life','Miller High Life','0','1','1','0','0','1','0','0','0','1','0','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Olde English','Olde English','1','0','0','1','0','1','0','0','0','0','1','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Mils Best Ice','Mils Best Ice','0','1','0','1','0','1','0','0','0','1','0','1')")
+        cursor.execute("INSERT INTO beers VALUES ('Steel Reserve Triple','Steel Reserve Triple','1','0','1','0','0','1','0','0','0','0','1','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Magnum','Magnum','0','1','0','1','0','1','0','0','1','0','1','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Coors Light','Coors Light','0','1','1','0','0','1','0','0','0','0','0','0')")
+        cursor.execute("INSERT INTO beers VALUES ('HG800','HG800','0','1','0','1','0','1','0','0','0','0','0','1')")
+        cursor.execute("INSERT INTO beers VALUES ('Extra Gold','Extra Gold','0','1','0','1','0','1','0','0','1','1','0','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Miller Lite','Miller Lite','0','1','0','1','0','1','0','0','0','0','1','1')")
+        cursor.execute("INSERT INTO beers VALUES ('Mils Best Light','Mils Best Light','0','1','0','1','0','1','0','0','0','0','0','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Mickeys','Mickeys','0','1','0','1','0','1','0','0','1','1','1','1')")
+        cursor.execute("INSERT INTO beers VALUES ('Red Do','Red Do','0','1','0','1','0','1','0','0','0','0','0','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Coors Banquet','Coors Banquet','0','1','0','1','0','1','0','0','1','1','1','1')")
+        cursor.execute("INSERT INTO beers VALUES ('Mils Best','Mils Best','0','1','0','1','0','1','0','0','0','0','0','1')")
+        cursor.execute("INSERT INTO beers VALUES ('Killians Red','Killians Red','1','0','1','0','1','0','0','0','1','1','1','1')")
+        cursor.execute("INSERT INTO beers VALUES ('Weinhard Redwood Flats Amber','Weinhard Redwood Flats Amber','1','0','1','0','1','0','0','0','0','1','0','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Leines Creamy Dark','Leines Creamy Dark','0','1','0','1','1','0','0','0','0','0','0','1')")
+        cursor.execute("INSERT INTO beers VALUES ('Leines Red Lager','Leines Red Lager','1','0','1','0','1','0','0','0','0','1','1','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Leines Sunset Wheat','Leines Sunset Wheat','0','1','1','0','1','0','0','0','0','0','0','1')")
+        cursor.execute("INSERT INTO beers VALUES ('Blue Moon Summer Honey','Blue Moon Summer Honey','0','1','0','1','1','0','0','0','1','0','1','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Leines Fireside Nut Brown','Leines Fireside Nut Brown','0','1','0','1','1','0','0','0','0','1','0','1')")
+        cursor.execute("INSERT INTO beers VALUES ('Leines Classic Amber','Leines Classic Amber','0','1','0','1','1','0','0','0','1','0','1','1')")
+        cursor.execute("INSERT INTO beers VALUES ('Leines Honey Weiss','Leines Honey Weiss','1','0','1','0','1','0','0','0','1','0','1','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Leines Oktoberfest','Leines Oktoberfest','1','0','1','0','1','0','0','0','0','1','0','1')")
+        cursor.execute("INSERT INTO beers VALUES ('Lein Light','Lein Light','0','1','0','1','1','0','0','0','0','0','0','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Blue Moon Harvest Pumpkin','Blue Moon Harvest Pumpkin','1','0','1','0','1','0','0','0','1','1','1','1')")
+        cursor.execute("INSERT INTO beers VALUES ('Blue Moon Belgian White','Blue Moon Belgian White','1','0','0','1','1','0','0','0','0','1','0','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Leines Berry Weiss','Leines Berry Weiss','0','1','1','0','1','0','0','0','1','0','1','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Blue Moon Spring Blonde','Blue Moon Spring Blonde','0','1','0','1','1','0','0','0','0','1','0','1')")
+        cursor.execute("INSERT INTO beers VALUES ('Blue Moon Winter Abbey','Blue Moon Winter Abbey','0','1','0','1','1','0','0','0','1','0','1','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Lein','Lein','0','1','0','1','1','0','0','0','1','1','0','1')")
+        cursor.execute("INSERT INTO beers VALUES ('Weinhard Woodland Pass IPA','Weinhard Woodland Pass IPA','0','1','0','1','1','0','0','0','0','0','1','1')")
+        cursor.execute("INSERT INTO beers VALUES ('Weinhard Private Reserve','Weinhard Private Reserve','0','1','1','0','1','0','0','0','0','1','1','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Coors Winterfest','Coors Winterfest','1','0','0','1','1','0','0','0','0','0','0','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Batch 19','Batch 19','1','0','1','0','1','0','0','0','1','1','0','1')")
+        cursor.execute("INSERT INTO beers VALUES ('Leines Summer Shandy','Leines Summer Shandy','0','1','1','0','1','0','0','0','0','1','1','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Tyskie','Tyskie','0','1','0','1','0','0','1','0','1','0','0','1')")
+        cursor.execute("INSERT INTO beers VALUES ('Peroni','Peroni','1','0','1','0','0','0','1','0','0','0','1','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Lech','Lech','1','0','1','0','0','0','1','0','0','0','0','1')")
+        cursor.execute("INSERT INTO beers VALUES ('Aguila','Aguila','0','1','0','1','0','0','1','0','0','1','0','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Cusquena','Cusquena','1','0','0','1','0','0','1','0','1','0','0','1')")
+        cursor.execute("INSERT INTO beers VALUES ('Cristal','Cristal','1','0','0','1','0','0','1','0','0','1','1','1')")
+        cursor.execute("INSERT INTO beers VALUES ('Pilsner Urquell','Pilsner Urquell','0','1','0','1','0','0','1','0','1','0','0','0')")
+        cursor.execute("INSERT INTO beers VALUES ('Grolsch Premium','Grolsch Premium','0','1','0','1','0','0','1','0','0','1','1','0')")
+
+
+        # save data to database
+        conn.commit()
 #from kivy.interactive import InteractiveLauncher
 
 #import mysql.connector
@@ -137,7 +226,7 @@ Builder.load_string('''
         RelativeLayout:
             size_x: root.width
             size_hint_y: 0.15
-            pos: 0, 660
+            pos_hint: {'x':0.0,'y':.85}
             Image:
                 allow_stretch: True
                 keep_ratio: False
@@ -149,7 +238,7 @@ Builder.load_string('''
                 size: 150, 50
                 pos_hint: {'x':0.0, 'y':0.3}
                 on_press: root.on_click()
-                background_normal: 'images/rect_button.png'
+                background_normal: 'images/chromeButtonUp.png'
                 allow_stretch: True
                 keep_ratio: False
             Button:
@@ -185,33 +274,24 @@ Builder.load_string('''
         RelativeLayout:
             size_x: root.width
             size_hint_y: 0.15
-            pos: 0, 660
+            pos_hint: {'x':0.0,'y':.85}
             Image:
                 allow_stretch: True
                 keep_ratio: False
                 size: root.width, root.height
                 source: 'images/navigation_bar_gradient.jpg'
             Button:
-                text: 'Main Menu'
-                size_hint: None, None
-                size: 250, 50
-                pos_hint: {'x':0.0, 'y':0.3}
-                on_press: root.click_main_screen()
-            Button:
                 text: 'Product Screen'
                 size_hint: None, None
                 size: 250, 50
-                pos_hint: {'x':0.8, 'y':0.3}
+                pos_hint: {'x':0.0, 'y':0.3}
                 on_press: root.click_product_screen()
-        # RelativeLayout:
-        #     size_x: root.width
-        #     size_hint_y: 0.05
-        #     pos_hint: {'x':0.0, 'y':0.305}
-        #     Image:
-        #         allow_stretch: True
-        #         keep_ratio: False
-        #         size: root.width, root.height
-        #         source: 'images/product_list_gradient.jpg'
+            Button:
+                text: 'Main Menu'
+                size_hint: None, None
+                size: 250, 50
+                pos_hint: {'x':0.8, 'y':0.3}
+                on_press: root.click_main_screen()
 
 <ProductFilterScreen>:
     FloatLayout:
@@ -225,7 +305,7 @@ Builder.load_string('''
         RelativeLayout:
             size_x: root.width
             size_hint_y: 0.15
-            pos: 0, 660
+            pos_hint: {'x':0.0,'y':.85}
             Image:
                 allow_stretch: True
                 keep_ratio: False
@@ -261,7 +341,7 @@ Builder.load_string('''
 ''')
 
 class ProductScreen(Screen):
-
+    query_result = None
     scroll_view_one = ScrollView(bar_color= [0,0,0,0], size_hint=(1.0, None), height=240, pos_hint={'x':0.0,'y':0.5})
     scroll_view_two = ScrollView(bar_color= [0,0,0,0], size_hint=(1.0, None), height=240, pos_hint={'x':0.0,'y':0.1})
 
@@ -303,8 +383,10 @@ class ProductScreen(Screen):
         grid_one_layout.bind(minimum_width=grid_one_layout.setter('width'))
         for file_name in craft_image_list:
             anchor_one_layout = AnchorLayout(size_hint_x=None, size_hint_y=None, height=240, width=200, anchor_x='center', anchor_y='bottom')
-            btn = Button(size_hint_y=None, size_hint_x=None, height=240, width=200, background_color=[1,1,1,1], background_normal='images/bottles/{f_name}'.format(f_name=file_name))
-            label = Label(text=file_name, color=[0,0,0,1], italic=True, font_size='10dp', size_hint=(None, None), height=30, width=anchor_one_layout.width, halign='center', pos_hint={'x':0,'y':0})
+            btn = Button(text=file_name, color=[0,0,0,0], size_hint_y=None, size_hint_x=None, height=240, width=200, background_color=[1,1,1,1], background_normal='images/bottles/{f_name}'.format(f_name=file_name))
+            btn.bind(on_press=self.on_item_click)
+            beer_name = file_name[:-4]
+            label = Label(text=beer_name, color=[0,0,0,1], italic=True, font_size='12dp', size_hint=(None, None), height=30, width=anchor_one_layout.width, halign='center', pos_hint={'x':0,'y':0})
             anchor_one_layout.add_widget(btn)
             anchor_one_layout.add_widget(label)
             grid_one_layout.add_widget(anchor_one_layout)
@@ -324,9 +406,10 @@ class ProductScreen(Screen):
         grid_two_layout.bind(minimum_width=grid_two_layout.setter('width'))
         for file_name in domestic_image_list:
             anchor_two_layout = AnchorLayout(size_hint_x=None, size_hint_y=None, height=240, width=200, anchor_x='center', anchor_y='bottom')
-            btn = Button(size_hint_y=None, size_hint_x=None, height=240, width=200, background_color=[1,1,1,1], background_normal='images/bottles/{f_name}'.format(f_name=file_name))
+            btn = Button(text=file_name, color=[0,0,0,0], size_hint_y=None, size_hint_x=None, height=240, width=200, background_color=[1,1,1,1], background_normal='images/bottles/{f_name}'.format(f_name=file_name))
             btn.bind(on_press=self.on_item_click)
-            label = Label(text=file_name, color=[0,0,0,1], italic=True, font_size='10dp', size_hint=(None, None), height=30, width=anchor_two_layout.width, halign='center', pos_hint={'x':0,'y':0})
+            beer_name = file_name[:-4]
+            label = Label(text=beer_name, color=[0,0,0,1], italic=True, font_size='12dp', size_hint=(None, None), height=30, width=anchor_two_layout.width, halign='center', pos_hint={'x':0,'y':0})
             anchor_two_layout.add_widget(btn)
             anchor_two_layout.add_widget(label)
             grid_two_layout.add_widget(anchor_two_layout)
@@ -339,10 +422,15 @@ class ProductScreen(Screen):
         #layout_two
     def on_item_click(self, btn):
         beer_name = btn.text
+        beer_description = 'TESTING'
+        print beer_name
         sm.transition = SlideTransition(direction='left')
         sm.current = 'Product_Detail_Screen'
+        # PERFORM SECOND QUERY HERE to narrow to one item
+
+        # Call product detail class's populate function
         product_detail_instance = sm.get_screen('Product_Detail_Screen')
-        product_detail_instance.show_item(beer_name)
+        product_detail_instance.show_item(beer_name, beer_description)
 
     def on_click(self):
         sm.transition = SlideTransition(direction='right')
@@ -354,17 +442,21 @@ class ProductScreen(Screen):
         sm.current = 'Product_Detail_Screen'
 
     def update_list(self):
+        # Perform List Updates
         pass
         #self.remove_widget(self.scroll_view_one)
         #self.remove_widget(self.scroll_view_two)
 
 class ProductDetailScreen(Screen):
     beer_description = 'This is a description of the best beer in the world'
-    logoImage = Image(size=(200, 70), size_hint=(None, None), pos_hint={'x':0.12,'y':0.72}, source='images/main_logo.jpg', allow_stretch=True, keep_ratio=True)
+    logoImage = Image(size=(200, 70), size_hint=(None, None), pos_hint={'x':0.1,'y':0.72}, source='images/main_logo.jpg', allow_stretch=True, keep_ratio=True)
     nameLabel = Label(text='{name}'.format(name='Beer Name'), font_size=(30), color=[1,0,0,1], pos_hint={'x':0.25,'y':0.878}, size_hint=(.5,.12))
-    bottleImage = Image(size=(300, 425), size_hint=(None, None), pos=(100,150), source='images/bottles/{name}'.format(name='Aguila.jpg'), allow_stretch=True, keep_ratio=True)
-    descriptionLabel = Button(text='{desc}'.format(desc=beer_description), pos_hint={'x':0.5,'y':0.0}, size_hint=(1.0,1.0), background_color=[.3,.3,.3,1.0])
-    description_layout = BoxLayout(orietation='vertical', size_hint=(.5,.85), pos_hint={'x':0.5,'y':0.0}, background_color=[.3,.3,.3,1.0])
+    bottleImage_layout = AnchorLayout(anchor_x='center', anchor_y='center', size_hint=(0.5,0.85), pos=(0.0,0.0))
+    bottleImage = Image(size=(300, 425), size_hint=(None, None), source='images/bottles/{name}'.format(name='Aguila.jpg'), allow_stretch=True, keep_ratio=True)
+    nameLabel_two = Label(font_size='30sp', color=[0,0,0,1], size_hint=(1.0, 0.2))
+    locationLabel = Label(font_size='30sp', color=[0,0,0,1], size_hint=(1.0, 0.2))
+    descriptionLabel = Label(text='{desc}'.format(desc=beer_description), size_hint=(1.0,0.6), background_color=[.3,.3,.3,1.0])
+    description_layout = BoxLayout(orietation='vertical', size_hint=(.5,.85), pos_hint={'x':0.5,'y':0.0})
     def __init__(self, **kwargs):
         super(ProductDetailScreen, self).__init__(**kwargs)
         # File name of the beer selected
@@ -373,9 +465,12 @@ class ProductDetailScreen(Screen):
         # Beer name from the given bottle name
         #beer_name = re.sub('[^a-zA-Z0-9\n]', ' ', bottle_name)
         #beer_name = beer_name[:-4]
-        # Beer text description pulled from the given beer_name
+        # Beer text description pulled cfrom the given beer_name
         # NEEDS TO BE SET
+        self.description_layout.add_widget(self.nameLabel_two)
+        self.description_layout.add_widget(self.locationLabel)
         self.description_layout.add_widget(self.descriptionLabel)
+        self.bottleImage_layout.add_widget(self.bottleImage)
         # Get all the tags for the given beer
         # NEEDS TO BE SET
         beer_tags = 'sports football stadium party coors molson light beer mountains'
@@ -394,7 +489,7 @@ class ProductDetailScreen(Screen):
             relative_one_layout.add_widget(label)
             grid_one_layout.add_widget(relative_one_layout)
 
-        scroll_view_one = ScrollView(bar_color= [0,0,0,0], size_hint=(1.0, None), height=30, pos_hint={'x':0.0,'y':0.0})
+        scroll_view_one = ScrollView(bar_color=[0,0,0,0], size_hint=(1.0, None), height=30, pos_hint={'x':0.0,'y':0.0})
         scroll_view_one.do_scroll_y=False
         scroll_view_one.do_scroll_x=True
         scroll_view_one.add_widget(grid_one_layout)
@@ -403,7 +498,7 @@ class ProductDetailScreen(Screen):
 
         # Add wigets to the product detail page
         self.add_widget(self.logoImage)
-        self.add_widget(self.bottleImage)
+        self.add_widget(self.bottleImage_layout)
         self.add_widget(self.nameLabel)
         self.add_widget(self.description_layout)
 
@@ -420,8 +515,11 @@ class ProductDetailScreen(Screen):
             sm.transition = WipeTransition(direction='left')
             sm.current = 'Product_Screen'
 
-    def show_item(self, product):
-        self.bottle_name = product
+    def show_item(self, name, description):
+        self.nameLabel.text = name[:-4]
+        self.bottleImage.source = 'images/bottles/' + name
+        self.logoImage.source = 'images/logos/' + name
+        self.descriptionLabel.text = description
 
 class ProductFilterScreen(Screen):
     # Dictionary that contains all the fields. 1 represents selected, 0 is not selected.
@@ -516,31 +614,40 @@ class ProductFilterScreen(Screen):
         self.box_layout_one.pos=(0,300)
         #self.box_layout_two.pos=(1300,400)
         #self.box_layout_three.pos=(1300,400)
-        self.box_layout_four.pos=(1300,300)
+        self.box_layout_four.pos=(1300,300) 
+        #---------------------------------------------------
         for i in self.query_dict:
             print i + str(self.query_dict[i])
-        resultt= self.query_dict['bottle']
-        print resultt
+        result_q=[]
+        for i in self.query_dict:
+            print i + str(self.query_dict[i])
+            if(self.query_dict[i]==1):
+                result_q.append(i)
+            
+        print result_q
+        #search parameter to be passed to sql db
+        search_p=''
+        for i,j in enumerate(result_q):
+            search_p=search_p+j+'='+'1'
+            if(i+1<len(result_q)):
+               search_p=search_p+' and '
+        print search_p
+
         #PERFORM SQL QUERY HERE
+        #todo: include the case where all filters were skipped
+        cursor.execute('SELECT name FROM beers where %s'%(search_p))
+        allentries=cursor.fetchall()
+        print allentries
 
-        #cursor.execute('SELECT name FROM beers where bottle=%d & sports=%d'%(resultt,result2))
-
-        # allentries=cursor.fetchall()
-        # print allentries
         #---------------------------------------------------
         #RESET QUERY DIRECTIONARY
-        for k in self.query_dict.keys():
-            self.query_dict[k] = 0
+        #for k in self.query_dict.keys():
+        #    self.query_dict[k] = 0
         #Animate Screen Transition
         sm.transition = SlideTransition(direction='left')
         sm.current = 'Product_Screen'
         product_list_screen = sm.get_screen('Product_Screen')
         product_list_screen.update_list()
-        # Re-add all the widgets
-        # self.add_widget(self.stack_layout_one)
-        # self.add_widget(self.stack_layout_two)
-        # self.add_widget(self.stack_layout_three)
-        # self.add_widget(self.stack_layout_four)
 
         #out_anim = Animation(x=-700, y=0, t='in_out_back', duration=1.2)
         #out_anim.bind(on_complete=self.stack_animation_complete)
