@@ -238,7 +238,7 @@ Builder.load_string('''
                 size: 150, 50
                 pos_hint: {'x':0.0, 'y':0.3}
                 on_press: root.on_click()
-                background_normal: 'images/chromeButtonUp.png'
+                background_normal: 'images/chromeButtonUp.gif'
                 allow_stretch: True
                 keep_ratio: False
             Button:
