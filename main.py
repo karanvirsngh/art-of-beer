@@ -295,7 +295,7 @@ class ProductScreen(Screen):
         #Get all image file name in Images Craft Bottles
         craft_image_list = []
 
-        for i in os.listdir('./images/Craft/bottles/'):
+        for i in os.listdir('./images/bottles/'):
             craft_image_list.append(i)
         #First Horizontal Scrollable View
         grid_one_layout = GridLayout(cols=len(craft_image_list), spacing=10, size_hint_x=None)
@@ -316,7 +316,7 @@ class ProductScreen(Screen):
 
         #Get all image file name in Images Domestic Bottles
         domestic_image_list = []
-        for i in os.listdir('./images/Domestic/bottles/'):
+        for i in os.listdir('./images/bottles/'):
             domestic_image_list.append(i)
         #First Horizontal Scrollable View
         grid_two_layout = GridLayout(cols=len(domestic_image_list), spacing=10, size_hint_x=None)
@@ -359,9 +359,10 @@ class ProductScreen(Screen):
         #self.remove_widget(self.scroll_view_two)
 
 class ProductDetailScreen(Screen):
+    beer_description = 'This is a description of the best beer in the world'
     logoImage = Image(size=(200, 70), size_hint=(None, None), pos_hint={'x':0.12,'y':0.72}, source='images/main_logo.jpg', allow_stretch=True, keep_ratio=True)
     nameLabel = Label(text='{name}'.format(name='Beer Name'), font_size=(30), color=[1,0,0,1], pos_hint={'x':0.25,'y':0.878}, size_hint=(.5,.12))
-    bottleImage = Image(size=(300, 425), size_hint=(None, None), pos=(100,150), source='images/bottles/{name}'.format(name=''), allow_stretch=True, keep_ratio=True)
+    bottleImage = Image(size=(300, 425), size_hint=(None, None), pos=(100,150), source='images/bottles/{name}'.format(name='Aguila.jpg'), allow_stretch=True, keep_ratio=True)
     descriptionLabel = Button(text='{desc}'.format(desc=beer_description), pos_hint={'x':0.5,'y':0.0}, size_hint=(1.0,1.0), background_color=[.3,.3,.3,1.0])
     description_layout = BoxLayout(orietation='vertical', size_hint=(.5,.85), pos_hint={'x':0.5,'y':0.0}, background_color=[.3,.3,.3,1.0])
     def __init__(self, **kwargs):
@@ -374,8 +375,7 @@ class ProductDetailScreen(Screen):
         #beer_name = beer_name[:-4]
         # Beer text description pulled from the given beer_name
         # NEEDS TO BE SET
-        beer_description = ('This is a description of the best beer in the world')
-        self.description_layout.add_widget(descriptionLabel)
+        self.description_layout.add_widget(self.descriptionLabel)
         # Get all the tags for the given beer
         # NEEDS TO BE SET
         beer_tags = 'sports football stadium party coors molson light beer mountains'
@@ -402,10 +402,10 @@ class ProductDetailScreen(Screen):
 
 
         # Add wigets to the product detail page
-        self.add_widget(logoImage)
-        self.add_widget(bottleImage)
-        self.add_widget(nameLabel)
-        self.add_widget(description_layout)
+        self.add_widget(self.logoImage)
+        self.add_widget(self.bottleImage)
+        self.add_widget(self.nameLabel)
+        self.add_widget(self.description_layout)
 
     def animate(self):
         anim = Animation(x=100, y=100)
